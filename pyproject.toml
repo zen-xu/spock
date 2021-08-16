@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyspock"
 version = "0.1.0"
-description = "Python implemention for spock framework"
+description = "Python implementation for spock framework"
 authors = ["ZhengYu, Xu <zen-xu@outlook.com>"]
 license = "MIT"
 readme = "README.md"
