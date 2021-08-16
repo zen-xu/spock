@@ -6,6 +6,9 @@ authors = ["ZhengYu, Xu <zen-xu@outlook.com>"]
 license = "MIT"
 readme = "README.md"
 keywords = ["test", "unittest", "spock", "bdd"]
+packages = [
+    { include = "spock" },
+]
 classifiers = [
     "Development Status :: 1 - Planning",
     "License :: OSI Approved :: MIT License",
