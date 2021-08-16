@@ -15,7 +15,8 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }} / ${{ matrix.python-version }}
+    name: ${{ matrix.os }} / ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}-latest
     continue-on-error: ${{ matrix.allow-failure }}
     strategy:
       matrix:
