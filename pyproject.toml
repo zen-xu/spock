@@ -7,7 +7,8 @@ license = "MIT"
 readme = "README.md"
 keywords = ["test", "unittest", "spock", "bdd"]
 packages = [
-    { include = "spock" },
+    { include = "spock", from = "src" },
+    { include = "_spock", from = "src" },
 ]
 classifiers = [
     "Development Status :: 1 - Planning",
