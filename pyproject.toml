@@ -79,5 +79,7 @@ exclude_lines = [
 name = "cz_conventional_commits"
 version = "0.1.0"
 version_files = [
-    "pyproject.toml:version"
+    "pyproject.toml:version",
+    "spock/__init__.py",
+    "tests/test_version.py",
 ]
