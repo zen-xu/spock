@@ -4,12 +4,12 @@ repos:
     hooks:
       - id: black
 
-  - repo: https://gitlab.com/pycqa/flake8
+  - repo: https://github.com/PyCQA/flake8
     rev: 3.9.2
     hooks:
       - id: flake8
 
-  - repo: https://github.com/timothycrosley/isort
+  - repo: https://github.com/PyCQA/isort
     rev: 5.9.3
     hooks:
       - id: isort
@@ -17,7 +17,7 @@ repos:
         exclude: ^.*/?setup\.py$
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.0.1
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
@@ -32,7 +32,7 @@ repos:
         additional_dependencies: [pydantic==1.8.2]
 
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v2.17.13
+    rev: v2.18.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
