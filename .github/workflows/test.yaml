@@ -46,7 +46,7 @@ jobs:
 
       - name: Run tests
         run: |
-          poetry run pytest tests/ -p no:cov -o addopts=""
+          poetry run pytest tests/
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
