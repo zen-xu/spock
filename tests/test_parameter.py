@@ -4,6 +4,7 @@ from typing import Callable
 import pytest
 
 from _spock.parameter import Parameter
+from _spock.parameter import declare
 
 
 @pytest.fixture(scope="function")
@@ -76,3 +77,10 @@ class TestParameter:
         a.__accept_expression__ = True
         b.__accept_expression__ = True
         assert exp(a, b)(a=arg[0], b=arg[1]) == expected
+
+
+def test_declare():
+    a, b, c = declare("a", "b", "c")
+    assert a.__name__ == "a"
+    assert b.__name__ == "b"
+    assert c.__name__ == "c"

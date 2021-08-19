@@ -7,6 +7,7 @@ from typing import Callable
 from typing import Iterable
 from typing import List
 from typing import Optional
+from typing import Tuple
 from typing import Union
 
 
@@ -217,3 +218,7 @@ class Expression:
 
     def __ne__(self, rv: Any) -> Expression:  # type: ignore
         return self.__rebuild_expression__(op.ne, rv)
+
+
+def declare(*param_names: str) -> Tuple[Parameter, ...]:
+    return tuple(Parameter(name) for name in param_names)
