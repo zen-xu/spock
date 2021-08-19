@@ -3,6 +3,8 @@ from typing import Callable
 
 import pytest
 
+from _spock.parameter import AddArgumentsFailed
+from _spock.parameter import BuildExpressionError
 from _spock.parameter import Parameter
 from _spock.parameter import declare
 
@@ -28,9 +30,19 @@ class TestParameter:
         a << [1, 2, 3]
         assert a.__param_arguments__ == [1, 2, 3]
 
+        with pytest.raises(AddArgumentsFailed):
+            a << 2
+
     def test_bitwise_right_shift_operator(self, a: Parameter):
         [1, 2, 3] >> a
         assert a.__param_arguments__ == [1, 2, 3]
+
+        with pytest.raises(AddArgumentsFailed):
+            2 >> a  # type: ignore
+
+    def test_handle_operator_when_deny_accept_expression(self, a: Parameter):
+        with pytest.raises(BuildExpressionError):
+            a + 1
 
     @pytest.mark.parametrize(
         "exp,arg,expected",

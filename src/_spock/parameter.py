@@ -26,7 +26,8 @@ class Parameter:
         return kwargs[self.__name__]
 
     def __build_expression__(self, func: Callable, rv: Optional[Any] = None) -> Expression:
-        assert self.__accept_expression__
+        if not self.__accept_expression__:
+            raise BuildExpressionError("only support build expression in table")
 
         def new_func(**kwargs: Any) -> Any:
             arg = kwargs[self.__name__]
@@ -42,7 +43,8 @@ class Parameter:
         return Expression(new_func)
 
     def __rrshift__(self, args: Iterable) -> Parameter:
-        assert isinstance(args, Iterable)
+        if not isinstance(args, Iterable):
+            raise AddArgumentsFailed("args mut be iterable")
         self.__param_arguments__ += list(args)
         return self
 
@@ -80,7 +82,8 @@ class Parameter:
         if self.__accept_expression__:
             return self.__build_expression__(op.lshift, rv)
         else:
-            assert isinstance(rv, Iterable)
+            if not isinstance(rv, Iterable):
+                raise AddArgumentsFailed("args mut be iterable")
             self.__param_arguments__ += list(rv)
             return self
 
@@ -222,3 +225,11 @@ class Expression:
 
 def declare(*param_names: str) -> Tuple[Parameter, ...]:
     return tuple(Parameter(name) for name in param_names)
+
+
+class BuildExpressionError(Exception):
+    """build expression failed"""
+
+
+class AddArgumentsFailed(Exception):
+    """add arguments failed"""
