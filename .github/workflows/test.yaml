@@ -47,3 +47,9 @@ jobs:
       - name: Run tests
         run: |
           poetry run pytest tests/ -p no:cov -o addopts=""
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          fail_ci_if_error: true
+          file: ./coverage.xml
