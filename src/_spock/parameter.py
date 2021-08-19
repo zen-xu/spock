@@ -81,11 +81,11 @@ class Parameter:
     def __lshift__(self, rv: Any) -> Union[Parameter, Expression]:
         if self.__accept_expression__:
             return self.__build_expression__(op.lshift, rv)
-        else:
-            if not isinstance(rv, Iterable):
-                raise AddArgumentsFailed("args mut be iterable")
-            self.__param_arguments__ += list(rv)
-            return self
+
+        if not isinstance(rv, Iterable):
+            raise AddArgumentsFailed("args mut be iterable")
+        self.__param_arguments__ += list(rv)
+        return self
 
     def __rshift__(self, rv: Any) -> Expression:
         return self.__build_expression__(op.rshift, rv)
