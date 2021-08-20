@@ -5,6 +5,7 @@ import pytest
 
 from _spock.parameter import AddArgumentsFailed
 from _spock.parameter import BuildExpressionError
+from _spock.parameter import Expression
 from _spock.parameter import Parameter
 from _spock.parameter import declare
 
@@ -38,7 +39,7 @@ class TestParameter:
         assert a.__param_arguments__ == [1, 2, 3]
 
         with pytest.raises(AddArgumentsFailed):
-            2 >> a  # type: ignore
+            2 >> a
 
     def test_handle_operator_when_deny_accept_expression(self, a: Parameter):
         with pytest.raises(BuildExpressionError):
@@ -96,3 +97,39 @@ def test_declare():
     assert a.__name__ == "a"
     assert b.__name__ == "b"
     assert c.__name__ == "c"
+
+
+@pytest.mark.parametrize(
+    "exp,arg,expected",
+    [
+        (lambda a: +a, 1, 1),
+        (lambda a: -a, 1, -1),
+        (lambda a: ~a, 0, -1),
+        (lambda a: a + 1, 1, 2),
+        (lambda a: a - 1, 1, 0),
+        (lambda a: a * 2, 2, 4),
+        (lambda a: a / 2, 5, 2.5),
+        (lambda a: a // 2, 5, 2),
+        (lambda a: a % 2, 5, 1),
+        (lambda a: a ** 2, 5, 25),
+        (lambda a: a << 1, 5, 10),
+        (lambda a: a >> 1, 5, 2),
+        (lambda a: a & 1, 5, 1),
+        (lambda a: a | 1, 5, 5),
+        (lambda a: a ^ 1, 5, 4),
+        (lambda a: a > 5, 4, False),
+        (lambda a: a >= 5, 5, True),
+        (lambda a: a < 5, 4, True),
+        (lambda a: a <= 5, 5, True),
+        (lambda a: a == 5, 5, True),
+        (lambda a: a != 5, 6, True),
+    ],
+)
+def test_expression(exp: Callable, arg: Any, expected: Any):
+    assert exp(Expression(lambda a: a))(a=arg) == expected
+
+
+def test_multi_expression():
+    exp1 = Expression(lambda a, **_: a)
+    exp2 = Expression(lambda b, **_: b)
+    assert (exp1 - 5 + exp2 * 3)(a=20, b=3) == (15 + 9)
