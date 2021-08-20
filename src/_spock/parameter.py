@@ -149,9 +149,7 @@ class Expression:
                     self_value = self_func(**kwargs)
                     return func(self_value, rv)
 
-        self.__func__ = new_func
-
-        return self
+        return Expression(new_func)
 
     def __call__(self, **kwargs: Any) -> Any:
         return self.__func__(**kwargs)
