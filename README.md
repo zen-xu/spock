@@ -16,13 +16,13 @@
   </a>
 </div>
 <div align="center">
-  <a href="https://deepsource.io/gh/zen-xu/spock/?ref=repository-badge}" target="_blank">
-    <img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/zen-xu/spock.svg/?label=active+issues&show_trend=true&token=mgZ7FgiJDAxSt9Ilav9vLFEo"/>
-  </a>
   <a href="https://results.pre-commit.ci/latest/github/zen-xu/spock/main">
     <img src="https://results.pre-commit.ci/badge/github/zen-xu/spock/main.svg">
   </a>
   <a href="https://github.com/psf/black">
     <img src="https://img.shields.io/badge/code%20style-black-000000.svg">
+  </a>
+  <a href="https://deepsource.io/gh/zen-xu/spock/?ref=repository-badge}" target="_blank">
+    <img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/zen-xu/spock.svg/?label=active+issues&show_trend=true&token=mgZ7FgiJDAxSt9Ilav9vLFEo"/>
   </a>
 </div>
