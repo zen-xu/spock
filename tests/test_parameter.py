@@ -39,7 +39,7 @@ class TestParameter:
         assert a.__param_arguments__ == [1, 2, 3]
 
         with pytest.raises(AddArgumentsFailed):
-            2 >> a
+            2 >> a  # type: ignore
 
     def test_handle_operator_when_deny_accept_expression(self, a: Parameter):
         with pytest.raises(BuildExpressionError):
