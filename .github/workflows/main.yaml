@@ -8,8 +8,8 @@ on:
       - "[0-9]+.[0-9]+.[0-9]+"
       - "[0-9]+.[0-9]+.[0-9]+rc[0-9]+"
     paths:
-      - "src/"
-      - "tests/"
+      - "src/**"
+      - "tests/**"
   pull_request:
     paths:
       - "src/"
