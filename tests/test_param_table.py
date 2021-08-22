@@ -54,7 +54,7 @@ class TestParamTable:
 
         assert list(table) == [(1, 2, 3), (4, 5, 6)]
 
-    def test_omit_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
+    def test_args_section1_has_more_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
         table / a / b  # section 1
         table | 1 | 2
         table | 4 | 5
@@ -62,3 +62,14 @@ class TestParamTable:
         table | 3
 
         assert list(table) == [(1, 2, 3), (4, 5, None)]
+
+    def test_args_section1_has_less_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
+        table / a / b  # section 1
+        table | 1 | 2
+        table | 4 | 5
+        table / c  # section 2
+        table | 3
+        table | 6
+        table | 7
+
+        assert list(table) == [(1, 2, 3), (4, 5, 6), (None, None, 7)]
