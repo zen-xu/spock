@@ -12,6 +12,7 @@ packages = [
 ]
 classifiers = [
     "Development Status :: 1 - Planning",
+    "Framework :: Pytest",
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS :: MacOS X",
     "Operating System :: Microsoft :: Windows",
