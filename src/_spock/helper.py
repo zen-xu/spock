@@ -19,10 +19,15 @@ def get_functions_in_function(
         context[args[0]] = func.__self__  # type: ignore[attr-defined]
 
     filename, firstlineno = code.path, code.firstlineno
-
     source = code.source()
     # skip def statement
-    body = source[source.getstatementrange(0)[1] :].deindent()
+    body_firstlineno = 0
+    while True:
+        statement = source.getstatement(body_firstlineno).deindent()
+        if str(statement).startswith("def "):
+            break
+        body_firstlineno += 1
+    body = source[source.getstatementrange(body_firstlineno)[1] :].deindent()
     co = compile(str(body), str(filename), "exec")
 
     eval(co, context)
