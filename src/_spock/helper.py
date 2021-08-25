@@ -21,19 +21,21 @@ def get_functions_in_function(
     filename, firstlineno = code.path, code.firstlineno
     source = code.source()
     # skip def statement
-    body_firstlineno = 0
+    body_statement_lineno = 0
     while True:
-        statement = source.getstatement(body_firstlineno).deindent()
+        statement = source.getstatement(body_statement_lineno).deindent()
         if str(statement).startswith("def "):
             break
-        body_firstlineno += 1
-    body = source[source.getstatementrange(body_firstlineno)[1] :].deindent()
+        body_statement_lineno += 1
+
+    body_firstlineno = source.getstatementrange(body_statement_lineno)[1]
+    body = source[body_firstlineno:].deindent()
     co = compile(str(body), str(filename), "exec")
 
     eval(co, context)  # skipcq: PYL-W0123
     context = {k: v for k, v in context.items() if inspect.isfunction(v)}
     for f in context.values():
         f_firstlineno = f.__code__.co_firstlineno + firstlineno
-        f.__code__ = f.__code__.replace(co_filename=str(filename), co_firstlineno=f_firstlineno + 1)
+        f.__code__ = f.__code__.replace(co_filename=str(filename), co_firstlineno=f_firstlineno + body_firstlineno)
 
     return context

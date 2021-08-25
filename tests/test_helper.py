@@ -56,16 +56,16 @@ def test_get_functions_in_method():
     obj = Class()
     funcs = get_functions_in_function(obj.a)
     assert funcs["func"]() == 1 + obj.data1
-    assert funcs["func"].__code__.co_firstlineno == obj.a.__code__.co_firstlineno + 1
+    assert funcs["func"].__code__.co_firstlineno == 36
 
 
 def test_get_functions_in_classmethod():
     funcs = get_functions_in_function(Class.b)
     assert funcs["func"]() == [3] + Class.data2
-    assert funcs["func"].__code__.co_firstlineno == Class.b.__code__.co_firstlineno + 5
+    assert funcs["func"].__code__.co_firstlineno == 46
 
 
 def test_get_functions_in_staticmethod():
     funcs = get_functions_in_function(Class.c)
     assert funcs["func"]() == "abc"
-    assert funcs["func"].__code__.co_firstlineno == Class.c.__code__.co_firstlineno + 1
+    assert funcs["func"].__code__.co_firstlineno == 51
