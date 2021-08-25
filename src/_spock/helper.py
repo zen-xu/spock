@@ -30,7 +30,7 @@ def get_functions_in_function(
     body = source[source.getstatementrange(body_firstlineno)[1] :].deindent()
     co = compile(str(body), str(filename), "exec")
 
-    eval(co, context)
+    eval(co, context)  # skipcq: PYL-W0123
     context = {k: v for k, v in context.items() if inspect.isfunction(v)}
     for f in context.values():
         f_firstlineno = f.__code__.co_firstlineno + firstlineno
