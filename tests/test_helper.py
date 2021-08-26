@@ -73,3 +73,11 @@ def test_get_functions_in_staticmethod():
     assert funcs["func"]() == "abc"
     assert funcs["func"].__code__.co_firstlineno == 52
     assert funcs["func"].__code__.co_filename == __file__
+
+
+def test_no_functions_defined_in_function():
+    def func():
+        pass
+
+    funcs = get_functions_in_function(func)
+    assert funcs == {}
