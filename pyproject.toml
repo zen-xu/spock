@@ -80,7 +80,8 @@ exclude = '''
 [tool.coverage.report]
 exclude_lines = [
     "pragma: no cover",
-    "if TYPE_CHECKING:"
+    "if TYPE_CHECKING:",
+    "if LESS_PY38:",
 ]
 
 [tool.commitizen]
