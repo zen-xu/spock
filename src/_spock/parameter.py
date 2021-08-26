@@ -100,7 +100,7 @@ class Parameter:
         return self.__build_expression__(op.or_, rv)
 
     def __matmul__(self, rv: Any) -> Expression:
-        return self.__build_expression__(op.matmul, rv)
+        return self.__build_expression__(op.matmul, rv)  # pragma: no cover
 
     def __lt__(self, rv: Any) -> Expression:
         return self.__build_expression__(op.lt, rv)
@@ -200,7 +200,7 @@ class Expression:
         return self.__rebuild_expression__(op.or_, rv)
 
     def __matmul__(self, rv: Any) -> Expression:
-        return self.__rebuild_expression__(op.matmul, rv)
+        return self.__rebuild_expression__(op.matmul, rv)  # pragma: no cover
 
     def __lt__(self, rv: Any) -> Expression:
         return self.__rebuild_expression__(op.lt, rv)
