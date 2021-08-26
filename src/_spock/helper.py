@@ -31,7 +31,7 @@ def get_functions_in_function(
     body_statement_lineno = 0
     while True:
         statement = source.getstatement(body_statement_lineno).deindent()
-        if any(["def " in line for line in statement.lines]):
+        if any(("def " in line for line in statement.lines)):  # see deepsource PTC-W0016
             body_statement_lineno += len(statement.lines)
             break
         body_statement_lineno += 1
