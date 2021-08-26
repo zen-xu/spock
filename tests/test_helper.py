@@ -1,5 +1,6 @@
 import pytest
 
+from _spock.helper import get_function_names
 from _spock.helper import get_functions_in_function
 
 
@@ -57,21 +58,21 @@ def test_get_functions_in_method():
     obj = Class()
     funcs = get_functions_in_function(obj.a)
     assert funcs["func"]() == 1 + obj.data1
-    assert funcs["func"].__code__.co_firstlineno == 37
+    assert funcs["func"].__code__.co_firstlineno == 38
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_classmethod():
     funcs = get_functions_in_function(Class.b)
     assert funcs["func"]() == [3] + Class.data2
-    assert funcs["func"].__code__.co_firstlineno == 47
+    assert funcs["func"].__code__.co_firstlineno == 48
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_staticmethod():
     funcs = get_functions_in_function(Class.c)
     assert funcs["func"]() == "abc"
-    assert funcs["func"].__code__.co_firstlineno == 52
+    assert funcs["func"].__code__.co_firstlineno == 53
     assert funcs["func"].__code__.co_filename == __file__
 
 
@@ -81,3 +82,23 @@ def test_no_functions_defined_in_function():
 
     funcs = get_functions_in_function(func)
     assert funcs == {}
+
+
+def test_get_function_names():
+    code = """
+    a = 1
+    def hello():
+        pass
+
+    def world():
+        pass
+
+    class C:
+        def inner(self):
+            pass
+
+    @abc
+    def new():
+        pass
+    """
+    assert get_function_names(code) == ["hello", "world", "new"]

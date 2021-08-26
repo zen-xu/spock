@@ -1,11 +1,14 @@
+import ast
 import inspect
 import sys
 
 from typing import Any
 from typing import Callable
 from typing import Dict
+from typing import List
 
 from _pytest._code.code import Code
+from _pytest._code.source import Source
 
 
 LESS_PY38 = sys.version_info <= (3, 8)
@@ -65,3 +68,9 @@ def get_functions_in_function(
             f.__code__ = f.__code__.replace(co_filename=str(filename), co_firstlineno=f_firstlineno + body_firstlineno)
 
     return context
+
+
+def get_function_names(source: str) -> List[str]:
+    source = Source(source).deindent()  # type: ignore
+    bodies = ast.parse(str(source)).body
+    return [body.name for body in bodies if isinstance(body, ast.FunctionDef)]
