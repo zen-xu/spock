@@ -73,3 +73,15 @@ class TestParamTable:
         table | 7
 
         assert list(table) == [(1, 2, 3), (4, 5, 6), (None, None, 7)]
+
+    def test_table_to_dict(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
+        table / a / b / c
+        table | 1 | 2 | 3
+        table | 4 | 5 | 6
+        table | 7 | 8 | 9
+
+        assert table.to_dict() == [
+            {"a": 1, "b": 2, "c": 3},
+            {"a": 4, "b": 5, "c": 6},
+            {"a": 7, "b": 8, "c": 9},
+        ]

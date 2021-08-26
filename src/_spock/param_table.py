@@ -1,9 +1,12 @@
 from __future__ import annotations
 
+import itertools
+
 from collections import defaultdict
 from itertools import cycle
 from typing import Any
 from typing import DefaultDict
+from typing import Dict
 from typing import Iterable
 from typing import Iterator
 from typing import List
@@ -45,3 +48,7 @@ class ParamTable(Iterable):
                     arg = None
                 items.append(arg)
             yield tuple(items)
+
+    def to_dict(self) -> List[Dict[str, Any]]:
+        column_names = list(itertools.chain(*self.columns))
+        return [dict(zip(column_names, row)) for row in self]
