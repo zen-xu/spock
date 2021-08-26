@@ -8,7 +8,7 @@
     <img src="https://codecov.io/gh/zen-xu/spock/branch/main/graph/badge.svg?token=WPG2V9w16r"/>
   </a>
   <a href="https://pypi.org/project/pyspock">
-    <img alt="PyPI" src="https://img.shields.io/pypi/v/spock">
+    <img alt="PyPI" src="https://img.shields.io/pypi/v/pyspock">
   </a>
   <img src="https://img.shields.io/pypi/pyversions/pyspock">
   <a href="https://github.com/zen-xu/spock/blob/main/LICENSE">
