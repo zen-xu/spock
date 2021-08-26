@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 
 from collections import defaultdict
+from itertools import chain
 from itertools import cycle
 from typing import Any
 from typing import DefaultDict
@@ -30,6 +31,10 @@ class ParamTable(Iterable):
         return self
 
     def __or__(self, arg: Any) -> ParamTable:
+        # enable Parameter __accept_expression__
+        for column in chain(*self.columns):
+            column.__accept_expression__ = True
+
         if self.current_columns_generate is None:
             self.current_columns_generate = cycle(self.columns[-1])
 

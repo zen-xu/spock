@@ -85,3 +85,20 @@ class TestParamTable:
             {"a": 4, "b": 5, "c": 6},
             {"a": 7, "b": 8, "c": 9},
         ]
+
+    def test_table_to_dict_with_params(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
+        table / a / b
+        table | 1 | a + 1
+        table | b | 5
+        table | 7 | 8
+
+        table / c
+        table | 3
+        table | 6
+        table | a + 2
+
+        assert table.to_dict() == [
+            {"a": 1, "b": a + 1, "c": 3},
+            {"a": b, "b": 5, "c": 6},
+            {"a": 7, "b": 8, "c": a + 2},
+        ]
