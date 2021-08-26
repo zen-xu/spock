@@ -17,24 +17,24 @@ from .parameter import Parameter
 
 class ParamTable(Iterable):
     def __init__(self) -> None:
-        self.columns: List[List[str]] = [[]]
+        self.columns: List[List[Parameter]] = [[]]
         self.arguments_mapping: DefaultDict[str, List[Any]] = defaultdict(list)
-        self.current_columns_generate: Optional[cycle[str]] = None
+        self.current_columns_generate: Optional[cycle[Parameter]] = None
 
     def __truediv__(self, param: Parameter) -> ParamTable:
         if self.current_columns_generate is not None:
             self.current_columns_generate = None
             self.columns.append([])
 
-        self.columns[-1].append(param.__name__)
+        self.columns[-1].append(param)
         return self
 
     def __or__(self, arg: Any) -> ParamTable:
         if self.current_columns_generate is None:
             self.current_columns_generate = cycle(self.columns[-1])
 
-        column_name = next(self.current_columns_generate)
-        self.arguments_mapping[column_name].append(arg)
+        column = next(self.current_columns_generate)
+        self.arguments_mapping[column.__name__].append(arg)
         return self
 
     def __iter__(self) -> Iterator[Any]:
@@ -50,5 +50,5 @@ class ParamTable(Iterable):
             yield tuple(items)
 
     def to_dict(self) -> List[Dict[str, Any]]:
-        column_names = list(itertools.chain(*self.columns))
+        column_names = list(column.__name__ for column in itertools.chain(*self.columns))
         return [dict(zip(column_names, row)) for row in self]

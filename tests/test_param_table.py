@@ -27,7 +27,7 @@ def c():
 class TestParamTable:
     def test_declare_header(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
         table / a / b / c
-        assert table.columns[-1] == ["a", "b", "c"]
+        assert table.columns[-1] == [a, b, c]
 
     def test_add_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
         table / a / b / c
