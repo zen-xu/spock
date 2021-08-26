@@ -102,3 +102,15 @@ def test_get_function_names():
         pass
     """
     assert get_function_names(code) == ["hello", "world", "new"]
+
+
+GLOBAL_VAR = "123"
+
+
+def return_global_var():
+    def func():
+        return GLOBAL_VAR
+
+
+def test_handle_global_var1():
+    assert get_functions_in_function(return_global_var)["func"]() == "123"

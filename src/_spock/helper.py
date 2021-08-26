@@ -18,7 +18,7 @@ def get_functions_in_function(
     func: Callable,
 ) -> Dict[str, Callable]:
     """Return functions contained in the passed function."""
-    context: Dict[str, Any] = {}
+    context: Dict[str, Any] = getattr(func, "__globals__", {})
 
     code = Code.from_function(func)
     args = code.getargs()
@@ -41,7 +41,7 @@ def get_functions_in_function(
     co = compile(str(body), str(filename), "exec")
 
     eval(co, context)  # skipcq: PYL-W0123
-    context = {k: v for k, v in context.items() if inspect.isfunction(v)}
+    context = {k: v for k, v in context.items() if inspect.isfunction(v) and k in get_function_names(str(body))}
     for f in context.values():
         f_firstlineno = f.__code__.co_firstlineno + firstlineno
         if LESS_PY38:
