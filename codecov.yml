@@ -5,3 +5,5 @@ coverage:
     patch: true
     project: false
 comment: false
+ignore:
+  - "**/__init__.py"
