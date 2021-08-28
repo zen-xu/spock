@@ -3,11 +3,13 @@ from typing import Callable
 
 import pytest
 
+from _spock.exceptions import UnableEvalParams
 from _spock.parameter import AddArgumentsFailed
 from _spock.parameter import BuildExpressionError
 from _spock.parameter import Expression
 from _spock.parameter import Parameter
 from _spock.parameter import declare
+from _spock.parameter import eval_params
 from _spock.parameter import zip_parameters_values
 
 
@@ -160,3 +162,33 @@ def test_zip_parameters_values_when_omit_values():
         {"a": 3, "b": None},
         {"a": 4, "b": None},
     ]
+
+
+def test_eval_params():
+    a, b = declare("a", "b")
+    a.__accept_expression__ = True
+    b.__accept_expression__ = True
+
+    params = {
+        "a": 2,
+        "b": a + 2,
+        "c": b,
+        "d": b * a,
+    }
+
+    assert eval_params(**params) == {"a": 2, "b": 4, "c": 4, "d": 8}
+
+
+def test_eval_params_failed():
+    a, b = declare("a", "b")
+    a.__accept_expression__ = True
+    b.__accept_expression__ = True
+
+    params = {
+        "a": 2,
+        "b": b,
+        "c": b,
+        "d": b * a,
+    }
+    with pytest.raises(UnableEvalParams):
+        eval_params(**params)

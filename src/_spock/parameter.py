@@ -11,6 +11,8 @@ from typing import Optional
 from typing import Tuple
 from typing import Union
 
+from .exceptions import UnableEvalParams
+
 
 class Parameter:
     def __init__(self, name: str) -> None:
@@ -247,3 +249,29 @@ def zip_parameters_values(*params: Parameter) -> List[Dict[str, Any]]:
         result.append(arg)
 
     return result
+
+
+def eval_params(**args: Any) -> Dict[str, Any]:
+    expression_or_params = {}
+    normal_args = {}
+
+    for key, value in args.items():
+        if isinstance(value, (Expression, Parameter)):
+            expression_or_params[key] = value
+        else:
+            normal_args[key] = value
+
+    max_recursion_depth = 20
+    current_recursion_depth = 0
+    while expression_or_params:
+        tmp_expression_or_params = dict(**expression_or_params)
+        for key, f in tmp_expression_or_params.items():
+            try:
+                normal_args[key] = f(**normal_args)
+                expression_or_params.pop(key)
+            except (TypeError, KeyError):
+                current_recursion_depth += 1
+                if current_recursion_depth == max_recursion_depth:
+                    raise UnableEvalParams
+
+    return normal_args
