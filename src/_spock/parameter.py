@@ -4,6 +4,7 @@ import operator as op
 
 from typing import Any
 from typing import Callable
+from typing import Dict
 from typing import Iterable
 from typing import List
 from typing import Optional
@@ -231,3 +232,18 @@ class BuildExpressionError(Exception):
 
 class AddArgumentsFailed(Exception):
     """add arguments failed"""
+
+
+def zip_parameters_values(*params: Parameter) -> List[Dict[str, Any]]:
+    max_len = max(len(param.__param_arguments__) for param in params)
+    result = []
+    for i in range(max_len):
+        arg = {}
+        for param in params:
+            try:
+                arg[param.__name__] = param.__param_arguments__[i]
+            except IndexError:
+                arg[param.__name__] = None
+        result.append(arg)
+
+    return result

@@ -8,6 +8,7 @@ from _spock.parameter import BuildExpressionError
 from _spock.parameter import Expression
 from _spock.parameter import Parameter
 from _spock.parameter import declare
+from _spock.parameter import zip_parameters_values
 
 
 @pytest.fixture(scope="function")
@@ -133,3 +134,29 @@ def test_multi_expression():
     exp1 = Expression(lambda a, **_: a)
     exp2 = Expression(lambda b, **_: b)
     assert (exp1 - 5 + exp2 * 3)(a=20, b=3) == (15 + 9)
+
+
+def test_zip_parameters_values():
+    a, b = declare("a", "b")
+    a << [1, 2, 3, 4]
+    b << [2, 4, 5, 6]
+
+    assert zip_parameters_values(a, b) == [
+        {"a": 1, "b": 2},
+        {"a": 2, "b": 4},
+        {"a": 3, "b": 5},
+        {"a": 4, "b": 6},
+    ]
+
+
+def test_zip_parameters_values_when_omit_values():
+    a, b = declare("a", "b")
+    a << [1, 2, 3, 4]
+    b << [2, 4]
+
+    assert zip_parameters_values(a, b) == [
+        {"a": 1, "b": 2},
+        {"a": 2, "b": 4},
+        {"a": 3, "b": None},
+        {"a": 4, "b": None},
+    ]
