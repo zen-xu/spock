@@ -55,5 +55,4 @@ class ParamTable(Iterable):
             yield tuple(items)
 
     def to_dict(self) -> List[Dict[str, Any]]:
-        column_names = list(column.__name__ for column in itertools.chain(*self.columns))
-        return [dict(zip(column_names, row)) for row in self]
+        return [dict(zip((column.__name__ for column in itertools.chain(*self.columns)), row)) for row in self]
