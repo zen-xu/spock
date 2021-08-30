@@ -6,9 +6,15 @@ from typing import List
 from typing import Optional
 from typing import Union
 
+from _pytest import fixtures
 from _pytest._code.code import Code
-from _pytest.config import Config
+from _pytest.python import CallSpec2
+from _pytest.python import Class
 from _pytest.python import Function
+from _pytest.python import FunctionDefinition
+from _pytest.python import Metafunc
+from _pytest.python import Module
+from _pytest.python import PyCollector
 
 from .exceptions import UnableEvalParams
 from .helper import get_functions_in_function
@@ -22,72 +28,93 @@ class SpockFunction(Function):
     ...
 
 
-def generate_spock_functions(config: Config, func: Function, message: Optional[str]) -> Iterable[SpockFunction]:
-    __traceback__ = None  # noqa: F841
+def generate_spock_functions(
+    collector: PyCollector, name: str, obj: object, message: Optional[str]
+) -> Iterable[SpockFunction]:
+    blocks = get_functions_in_function(obj)  # type: ignore
+    expect_block = blocks["expect"]
 
-    blocks = get_functions_in_function(func.obj)
-
-    arguments = []
     where_block = blocks.get("where")
-    if where_block:
-        arguments = generate_arguments(where_block)
-
-    expect_block = blocks.get("expect")
-    if not arguments:
-        yield SpockFunction.from_parent(func.parent, name=func.name, callobj=expect_block)
+    if where_block is None:
+        yield SpockFunction.from_parent(
+            collector,
+            name=name,
+            callobj=expect_block,
+            fixtureinfo=collector.session._fixturemanager,
+        )
         return
 
-    # definition = FunctionDefinition.from_parent(func.parent, name="expect", callobj=expect_block)
-    # fixtureinfo = definition._fixtureinfo
+    argnames = tuple(n for n in Code.from_function(where_block).getargs() if n != "_")
+    modulecol = collector.getparent(Module)
+    assert modulecol is not None
+    module = modulecol.obj
+    clscol = collector.getparent(Class)
+    cls = clscol and clscol.obj or None
+    fm = collector.session._fixturemanager
 
-    # clscol = func.getparent(Class)
-    # cls = clscol and clscol.obj or None
-    # modulecol = func.getparent(Module)
+    definition = FunctionDefinition.from_parent(collector, name=name, callobj=expect_block)
+    metafunc = Metafunc(definition, definition._fixtureinfo, collector.config, cls=cls, module=module)
 
-    # metafunc = Metafunc(
-    #     definition=definition,
-    #     fixtureinfo=fixtureinfo,
-    #     config=config,
-    #     cls=cls,
-    #     module=modulecol.obj,  # type: ignore
-    # )
-    # callspec = CallSpec2(metafunc)
-
-    for idx, argument in enumerate(arguments):
+    for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
 
-            def raise_error() -> None:
-                raise UnableEvalParams
+            def failed() -> None:
+                raise ValueError(f"Unable to eval index {idx} params")
 
+            id = f"unable to eval {idx} params"
             yield SpockFunction.from_parent(
-                func.parent, name=f"unable eval params for {idx}", callobj=raise_error, originalname=func.name
+                collector,
+                name=id,
+                callobj=failed,
+                keywords={id: True},
+                originalname=name,
             )
         else:
-            if message:
-                name = message.format(**argument)
-            else:
-                name = "-".join(argument.values())
+            try:
+                id = message.format(**argument)  # type: ignore
+            except Exception:
+                id = "-".join(map(str, argument.values()))
 
-            # newcallspec = callspec.copy()
-            # argnames = argument.keys()
-            # newcallspec.setmulti2(
-            #     valtypes={k: "funcargs" for k in argnames},
-            #     argnames=list(argnames),
-            #     valset=argument.values(),
-            #     id=name,
-            #     marks=[],
-            #     scopenum=4,
-            #     param_index=idx,
-            # )
+            fixtureinfo = fixtures.FuncFixtureInfo(
+                argnames=argnames,
+                initialnames=argnames,
+                names_closure=list(argnames),
+                name2fixturedefs={
+                    k: [
+                        fixtures.FixtureDef(
+                            fixturemanager=fm,
+                            baseid=None,
+                            argname=k,
+                            params=list(argument.values()),
+                            func=fixtures.get_direct_param_fixture_func,
+                            scope="function",
+                        )
+                    ]
+                    for k in argnames
+                },
+            )
+            fixtureinfo.prune_dependency_tree()
 
-            # breakpoint()
-            # callobj = pytest.mark.parametrize(list(argument.keys()), [(*argument.values(),)])(expect_block)
+            definition = FunctionDefinition.from_parent(collector, name=name, callobj=expect_block)
+            callspec = CallSpec2(metafunc)
+            callspec.setmulti2(
+                {k: "params" for k in argnames},
+                argnames,
+                argument.values(),
+                id,
+                [],
+                4,
+                idx,
+            )
 
             yield SpockFunction.from_parent(
-                func.parent,
-                name=name,
+                collector,
+                name=id,
+                callspec=callspec,
                 callobj=expect_block,
-                originalname=func.name,
+                fixtureinfo=fixtureinfo,
+                keywords={id: True},
+                originalname=name,
             )
 
 
