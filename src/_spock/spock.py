@@ -61,7 +61,7 @@ def generate_spock_functions(
             def failed() -> None:
                 raise ValueError(f"Unable to eval index {idx} params")
 
-            id = f"unable to eval {idx} params"
+            id = f"{name}[unable to eval {idx} params]"
             yield SpockFunction.from_parent(
                 collector,
                 name=id,
@@ -75,6 +75,7 @@ def generate_spock_functions(
             except Exception:
                 id = "-".join(map(str, argument.values()))
 
+            id = f"{name}[{id}]"
             fixtureinfo = fixtures.FuncFixtureInfo(
                 argnames=argnames,
                 initialnames=argnames,

@@ -8,5 +8,5 @@ def test_spock():
 
     def where(_, a, b):
         _ / a / b
-        _ | 1 | 2
+        _ | 1 | 1
         _ | 3 | 4
