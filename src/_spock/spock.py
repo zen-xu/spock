@@ -25,6 +25,20 @@ from .parameter import zip_parameters_values
 
 
 class SpockFunction(Function):
+    def setup(self) -> None:
+        super().setup()
+
+        testfunc = self.obj
+        blocks = get_functions_in_function(testfunc)
+        for block_name in ["given", "when", "then", "expect", "cleanup"]:
+            block_func = blocks.get(block_name)
+            if block_func is None:
+                continue
+            block_args = Code.from_function(block_func).getargs()
+            for arg in block_args:
+                if arg not in self.funcargs:
+                    self.funcargs[arg] = self._request.getfixturevalue(arg)
+
     def runtest(self) -> None:
         testfunc = self.obj
         blocks = get_functions_in_function(testfunc)
@@ -45,7 +59,6 @@ def generate_spock_functions(
             collector,
             name=name,
             callobj=obj,
-            fixtureinfo=collector.session._fixturemanager,
         )
         return
 
