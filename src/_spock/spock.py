@@ -25,21 +25,26 @@ from .parameter import zip_parameters_values
 
 
 class SpockFunction(Function):
-    ...
+    def runtest(self) -> None:
+        testfunc = self.obj
+        blocks = get_functions_in_function(testfunc)
+        expect_block = blocks["expect"]
+        expect_argnames = Code.from_function(expect_block).getargs()
+        funcargs = self.funcargs
+        testargs = {arg: funcargs[arg] for arg in expect_argnames}
+        expect_block(**testargs)
 
 
 def generate_spock_functions(
     collector: PyCollector, name: str, obj: object, message: Optional[str]
 ) -> Iterable[SpockFunction]:
     blocks = get_functions_in_function(obj)  # type: ignore
-    expect_block = blocks["expect"]
-
     where_block = blocks.get("where")
     if where_block is None:
         yield SpockFunction.from_parent(
             collector,
             name=name,
-            callobj=expect_block,
+            callobj=obj,
             fixtureinfo=collector.session._fixturemanager,
         )
         return
@@ -52,7 +57,7 @@ def generate_spock_functions(
     cls = clscol and clscol.obj or None
     fm = collector.session._fixturemanager
 
-    definition = FunctionDefinition.from_parent(collector, name=name, callobj=expect_block)
+    definition = FunctionDefinition.from_parent(collector, name=name, callobj=obj)
     metafunc = Metafunc(definition, definition._fixtureinfo, collector.config, cls=cls, module=module)
 
     for idx, argument in enumerate(generate_arguments(where_block)):
@@ -96,7 +101,6 @@ def generate_spock_functions(
             )
             fixtureinfo.prune_dependency_tree()
 
-            definition = FunctionDefinition.from_parent(collector, name=name, callobj=expect_block)
             callspec = CallSpec2(metafunc)
             callspec.setmulti2(
                 {k: "params" for k in argnames},
@@ -112,7 +116,7 @@ def generate_spock_functions(
                 collector,
                 name=id,
                 callspec=callspec,
-                callobj=expect_block,
+                callobj=obj,
                 fixtureinfo=fixtureinfo,
                 keywords={id: True},
                 originalname=name,
