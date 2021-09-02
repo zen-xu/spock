@@ -92,6 +92,3 @@ version_files = [
     "spock/__init__.py",
     "tests/test_version.py",
 ]
-
-[tool.pytest.ini_options]
-addopts = "--cov=src --cov-report=html --cov-report=xml -p pytester"
