@@ -46,13 +46,9 @@ jobs:
           poetry config experimental.new-installer false
           poetry config virtualenvs.in-project true
           poetry install
+          pip install tox tox-gh-actions codecov
 
-      - name: Run tests
+      - name: Test with tox
         run: |
-          poetry run pytest tests/
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: true
-          file: ./coverage.xml
+          tox
+          codecov
