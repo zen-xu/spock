@@ -34,3 +34,69 @@ def test_generate_arguments_with_table_style_failed():
     results = generate_arguments(values)
     assert isinstance(results[0], UnableEvalParams)
     assert results[1] == {"a": 3, "b": 4}
+
+
+def test_spock_function_with_where_block(testdir):
+
+    testdir.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock("{a} <= {b}")
+        def test_spock():
+
+            def expect(a, b):
+                assert a <= b
+
+            def where(_, a, b):
+                _ / a / b
+                _ | 1 | 2
+                _ | 3 | 4
+                _ | 7 | 6
+        """
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=2, failed=1)
+
+
+def test_spock_method_with_where_block(testdir):
+
+    testdir.makepyfile(
+        """
+        import pytest
+
+        class TestSpock:
+            @pytest.mark.spock("{a} <= {b}")
+            def test_spock(self):
+
+                def expect(a, b):
+                    assert a <= b
+
+                def where(_, a, b):
+                    _ / a / b
+                    _ | 1 | 2
+                    _ | 3 | 4
+                    _ | 7 | 6
+        """
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=2, failed=1)
+
+
+def test_spock_function_with_fixture(testdir):
+
+    testdir.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def expect(tmpdir, filename):
+                new_dir = tmpdir / filename
+
+            def where(filename):
+                filename << ["a", "b"]
+        """
+    )
+    result = testdir.runpytest()
+    result.assert_outcomes(passed=2)

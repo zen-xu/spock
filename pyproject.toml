@@ -94,4 +94,4 @@ version_files = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cov=src --cov-report=html --cov-report=xml"
+addopts = "--cov=src --cov-report=html --cov-report=xml -p pytester"
