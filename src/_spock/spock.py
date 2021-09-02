@@ -66,8 +66,8 @@ def generate_spock_functions(
     modulecol = collector.getparent(Module)
     assert modulecol is not None
     module = modulecol.obj
-    clscol = collector.getparent(Class)
-    cls = clscol and clscol.obj or None
+    cls_col = collector.getparent(Class)
+    cls = cls_col and cls_col.obj or None
     fm = collector.session._fixturemanager
 
     definition = FunctionDefinition.from_parent(collector, name=name, callobj=obj)
@@ -99,20 +99,19 @@ def generate_spock_functions(
                 initialnames=argnames,
                 names_closure=list(argnames),
                 name2fixturedefs={
-                    k: [
+                    argname: [
                         fixtures.FixtureDef(
                             fixturemanager=fm,
-                            baseid=None,
-                            argname=k,
+                            baseid=name,
+                            argname=argname,
                             params=list(argument.values()),
                             func=fixtures.get_direct_param_fixture_func,
                             scope="function",
                         )
                     ]
-                    for k in argnames
+                    for argname in argnames
                 },
             )
-            fixtureinfo.prune_dependency_tree()
 
             callspec = CallSpec2(metafunc)
             callspec.setmulti2(
