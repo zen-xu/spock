@@ -77,7 +77,7 @@ def generate_spock_functions(
     for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
 
-            def failed() -> None:
+            def failed(idx: int = idx) -> None:
                 raise ValueError(f"Unable to eval index {idx} params")
 
             id = f"{name}[unable to eval {idx} params]"
