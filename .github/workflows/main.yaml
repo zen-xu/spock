@@ -60,3 +60,4 @@ jobs:
         with:
           fail_ci_if_error: true
           file: ./coverage.xml
+        if: ${{ matrix.python-version == 3.9 && matrix.os == 'Ubuntu' }}
