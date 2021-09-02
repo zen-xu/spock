@@ -63,9 +63,10 @@ def generate_spock_functions(
         return
 
     argnames = tuple(n for n in Code.from_function(where_block).getargs() if n != "_")
-    modulecol = collector.getparent(Module)
-    assert modulecol is not None
-    module = modulecol.obj
+    module_col = collector.getparent(Module)
+    if module_col is None:
+        raise ValueError("module can't be None")
+    module = module_col.obj
     cls_col = collector.getparent(Class)
     cls = cls_col.obj if cls_col else None
     fm = collector.session._fixturemanager
