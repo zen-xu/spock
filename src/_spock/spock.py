@@ -91,7 +91,7 @@ def generate_spock_functions(
         else:
             try:
                 id = message.format(**argument)  # type: ignore
-            except Exception:
+            except (AttributeError, KeyError):
                 id = "-".join(map(str, argument.values()))
 
             id = f"{name}[{id}]"
