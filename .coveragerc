@@ -1,7 +1,6 @@
 [run]
 include =
   src/*
-parallel = 1
 branch = 1
 
 [report]
