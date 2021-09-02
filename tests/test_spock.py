@@ -1,4 +1,4 @@
-from _spock.spock import UnableEvalParams
+from _spock.exceptions import UnableEvalParams
 from _spock.spock import generate_arguments
 
 
