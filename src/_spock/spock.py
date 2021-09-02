@@ -67,7 +67,7 @@ def generate_spock_functions(
     assert modulecol is not None
     module = modulecol.obj
     cls_col = collector.getparent(Class)
-    cls = cls_col and cls_col.obj or None
+    cls = cls_col.obj if cls_col else None
     fm = collector.session._fixturemanager
 
     definition = FunctionDefinition.from_parent(collector, name=name, callobj=obj)
