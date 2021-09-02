@@ -36,9 +36,9 @@ def test_generate_arguments_with_table_style_failed():
     assert results[1] == {"a": 3, "b": 4}
 
 
-def test_spock_function_with_where_block(testdir):
+def test_spock_function_with_where_block(pytester):
 
-    testdir.makepyfile(
+    pytester.makepyfile(
         """
         import pytest
 
@@ -55,13 +55,13 @@ def test_spock_function_with_where_block(testdir):
                 _ | 7 | 6
         """
     )
-    result = testdir.runpytest()
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=2, failed=1)
 
 
-def test_spock_method_with_where_block(testdir):
+def test_spock_method_with_where_block(pytester):
 
-    testdir.makepyfile(
+    pytester.makepyfile(
         """
         import pytest
 
@@ -79,13 +79,13 @@ def test_spock_method_with_where_block(testdir):
                     _ | 7 | 6
         """
     )
-    result = testdir.runpytest()
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=2, failed=1)
 
 
-def test_spock_function_with_fixture(testdir):
+def test_spock_function_with_fixture(pytester):
 
-    testdir.makepyfile(
+    pytester.makepyfile(
         """
         import pytest
 
@@ -98,5 +98,5 @@ def test_spock_function_with_fixture(testdir):
                 filename << ["a", "b"]
         """
     )
-    result = testdir.runpytest()
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=2)
