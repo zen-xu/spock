@@ -143,16 +143,15 @@ def generate_arguments(func: Callable) -> List[Union[Dict[str, Any], UnableEvalP
         params = {arg: Parameter(arg) for arg in arg_names}
         func(**params)
         return zip_parameters_values(*params.values())  # type: ignore
-    else:
-        params = {arg: Parameter(arg) for arg in set(arg_names) - set(["_"])}
-        table = ParamTable()
-        params["_"] = table  # type: ignore
-        func(**params)
-        args = table.to_dict()
-        result: List[Union[Dict[str, Any], UnableEvalParams]] = []
-        for arg in args:
-            try:
-                result.append(eval_params(**arg))
-            except UnableEvalParams as e:
-                result.append(e)
-        return result
+    params = {arg: Parameter(arg) for arg in set(arg_names) - set(["_"])}
+    table = ParamTable()
+    params["_"] = table  # type: ignore
+    func(**params)
+    args = table.to_dict()
+    result: List[Union[Dict[str, Any], UnableEvalParams]] = []
+    for arg in args:
+        try:
+            result.append(eval_params(**arg))
+        except UnableEvalParams as e:
+            result.append(e)
+    return result
