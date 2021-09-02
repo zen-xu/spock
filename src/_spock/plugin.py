@@ -20,3 +20,4 @@ def pytest_pycollect_makeitem(collector: PyCollector, name: str, obj: object):
         else:
             message = None
         return list(generate_spock_functions(collector, name, obj, message))
+    return None
