@@ -51,4 +51,5 @@ jobs:
       - name: Test with tox
         run: |
           tox
+          coverage xml
           codecov
