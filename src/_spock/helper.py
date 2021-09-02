@@ -36,8 +36,8 @@ def get_functions_in_function(
             break
         body_statement_lineno += 1
 
-    body_firstlineno = source.getstatementrange(body_statement_lineno)[0]
-    body = source[body_firstlineno:].deindent()
+    body_firstlineno = body_statement_lineno
+    body = source[body_statement_lineno:].deindent()
     co = compile(str(body), str(filename), "exec")
 
     eval(co, context)  # skipcq: PYL-W0123
