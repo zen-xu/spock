@@ -143,7 +143,7 @@ def generate_arguments(func: Callable) -> List[Union[Dict[str, Any], UnableEvalP
         params = {arg: Parameter(arg) for arg in arg_names}
         func(**params)
         return zip_parameters_values(*params.values())  # type: ignore
-    params = {arg: Parameter(arg) for arg in set(arg_names) - set(["_"])}
+    params = {arg: Parameter(arg) for arg in {*arg_names} - {"_"}}
     table = ParamTable()
     params["_"] = table  # type: ignore
     func(**params)
