@@ -59,7 +59,7 @@ jobs:
           poetry config experimental.new-installer false
           poetry config virtualenvs.in-project true
           poetry install
-          poetry run pytest --cov=src --cov-report=xml
+          poetry run pytest --cov=src --cov-report=xml --cov-append
         env:
           COV_CORE_SOURCE: src
           COV_CORE_CONFIG: .coveragerc
