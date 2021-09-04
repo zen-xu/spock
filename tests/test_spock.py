@@ -100,3 +100,20 @@ def test_spock_function_with_fixture(pytester):
     )
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=2)
+
+
+def test_spock_missing_where_block(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def expect():
+                assert 1 == 1
+        """
+    )
+
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=1)
