@@ -65,6 +65,7 @@ def generate_spock_functions(
     argnames = tuple(n for n in Code.from_function(where_block).getargs() if n != "_")
     module_col = collector.getparent(Module)
     if module_col is None:
+        # pragma: no cover
         raise ValueError("module can't be None")
     module = module_col.obj
     cls_col = collector.getparent(Class)
@@ -78,6 +79,7 @@ def generate_spock_functions(
         if isinstance(argument, UnableEvalParams):
 
             def failed(idx: int = idx) -> None:
+                # pragma: no cover
                 raise ValueError(f"Unable to eval index {idx} params")
 
             id = f"{name}[unable to eval {idx} params]"
