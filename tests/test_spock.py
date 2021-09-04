@@ -117,3 +117,26 @@ def test_spock_missing_where_block(pytester):
 
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=1)
+
+
+def test_table_params_eval_failed(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock("{a} <= {b}")
+        def test_spock():
+
+            def expect(a, b):
+                assert a <= b
+
+            def where(_, a, b):
+                _ / a / b
+                _ | 1 | b
+                _ | 3 | 4
+        """
+    )
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=1, errors=1)
+    assert pytester.inline_genitems()[0][0]._request.node.name == "test_spock[unable to eval 0 params]"
