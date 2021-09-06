@@ -74,3 +74,18 @@ def get_function_names(source: str) -> List[str]:
     source = Source(source).deindent()  # type: ignore
     bodies = ast.parse(str(source)).body
     return [body.name for body in bodies if isinstance(body, ast.FunctionDef)]
+
+
+class Box:
+    _data: Dict[str, Any]
+
+    def __new__(cls) -> "Box":
+        box = super().__new__(cls)
+        box._data = {}
+
+        return box
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        if not name.startswith("_"):
+            self._data[name] = value
+        super().__setattr__(name, value)

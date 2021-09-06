@@ -114,3 +114,14 @@ def return_global_var():
 
 def test_handle_global_var1():
     assert get_functions_in_function(return_global_var)["func"]() == "123"
+
+
+def test_box():
+    from _spock.helper import Box
+
+    box = Box()
+    box.a = 1
+    box.b = "123"
+    box._c = 4.5
+    assert box._data == {"a": 1, "b": "123"}
+    assert box.a == 1  # type: ignore
