@@ -76,11 +76,12 @@ class SpockFunction(Function):
     def runtest(self) -> None:
         testfunc = self.obj
         blocks = get_functions_in_function(testfunc)
-        expect_block = blocks["expect"]
-        expect_argnames = Code.from_function(expect_block).getargs()
-        funcargs = self.funcargs
-        testargs = {arg: funcargs[arg] for arg in expect_argnames}
-        expect_block(**testargs)
+        if "expect" in blocks:
+            expect_func = blocks["expect"]
+            expect_argnames = Code.from_function(expect_func).getargs()
+            funcargs = self.funcargs
+            testargs = {arg: funcargs[arg] for arg in expect_argnames}
+            expect_func(**testargs)
 
 
 def generate_spock_functions(

@@ -119,6 +119,22 @@ def test_spock_missing_where_block(pytester):
     result.assert_outcomes(passed=1)
 
 
+def test_spock_missing_expect_block(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def where(filename):
+                filename << ["a", "b"]
+        """
+    )
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=2)
+
+
 def test_table_params_eval_failed(pytester):
 
     pytester.makepyfile(
