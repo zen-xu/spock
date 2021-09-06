@@ -57,6 +57,22 @@ class SpockFunction(Function):
                 if argname not in self.funcargs:
                     self.funcargs[argname] = self._request.getfixturevalue(argname)
 
+    def teardown(self) -> None:
+        super().teardown()
+        testfunc = self.obj
+        if testfunc.__name__ == "__spock_failed__":
+            return
+        blocks = get_functions_in_function(testfunc)
+
+        if "cleanup" not in blocks:
+            return
+
+        cleanup_func = blocks["cleanup"]
+        cleanup_argnames = Code.from_function(cleanup_func).getargs()
+        funcargs = self.funcargs
+        cleanup_args = {arg: funcargs[arg] for arg in cleanup_argnames}
+        cleanup_func(**cleanup_args)
+
     def runtest(self) -> None:
         testfunc = self.obj
         blocks = get_functions_in_function(testfunc)

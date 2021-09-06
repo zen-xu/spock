@@ -183,3 +183,25 @@ def test_given_block_with_fixture(pytester):
     )
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=1)
+
+
+def test_cleanup_block(pytester, tmpdir):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def given(me, tmpdir):
+                me.working_dir = tmpdir
+
+            def expect():
+                pass
+
+            def cleanup(working_dir):
+                working_dir.remove()
+        """
+    )
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=1)
