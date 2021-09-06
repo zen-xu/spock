@@ -201,7 +201,7 @@ def test_given_block_with_fixture(pytester):
     result.assert_outcomes(passed=1)
 
 
-def test_cleanup_block(pytester, tmpdir):
+def test_cleanup_block(pytester):
 
     pytester.makepyfile(
         """
@@ -221,3 +221,59 @@ def test_cleanup_block(pytester, tmpdir):
     )
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(passed=1)
+
+
+def test_when_and_then_blocks(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.fixture
+        def data():
+            return "1234"
+
+        @pytest.mark.spock
+        def test_zero_division_error():
+            def when():
+                1 / 0
+
+            def then(excinfo):
+                assert excinfo.type == ZeroDivisionError
+
+        @pytest.mark.spock
+        def test_raise_runtime_error():
+            def when():
+                raise ValueError("something wrong")
+
+            def then(excinfo):
+                assert excinfo.match("something wrong")
+
+        @pytest.mark.spock
+        def test_append_data():
+            def given(me):
+                me.container = []
+
+            def when(container):
+                container.append(1)
+
+            def then(container):
+                assert container == [1]
+
+        @pytest.mark.spock
+        def test_fixture():
+            def when(tmpdir, data):
+                (tmpdir / "a.txt").write(data)
+
+            def then(tmpdir, data):
+                assert (tmpdir / "a.txt").read() == data
+
+        @pytest.mark.spock
+        def test_missing_then_block():
+            def when():
+                1 + 1
+        """
+    )
+
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=5)

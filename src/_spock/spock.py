@@ -8,6 +8,7 @@ from typing import Union
 
 from _pytest import fixtures
 from _pytest._code.code import Code
+from _pytest._code.code import ExceptionInfo
 from _pytest.python import CallSpec2
 from _pytest.python import Class
 from _pytest.python import Function
@@ -55,6 +56,8 @@ class SpockFunction(Function):
             block_argnames = Code.from_function(block_func).getargs()
             for argname in block_argnames:
                 if argname not in self.funcargs:
+                    if argname == "excinfo":
+                        continue
                     self.funcargs[argname] = self._request.getfixturevalue(argname)
 
     def teardown(self) -> None:
@@ -82,6 +85,25 @@ class SpockFunction(Function):
             funcargs = self.funcargs
             testargs = {arg: funcargs[arg] for arg in expect_argnames}
             expect_func(**testargs)
+
+        if "when" in blocks:
+            when_func = blocks["when"]
+            funcargs = dict(self.funcargs)
+            when_argnames = Code.from_function(when_func).getargs()
+            when_args = {arg: funcargs[arg] for arg in when_argnames}
+            excinfo: Optional[ExceptionInfo] = None
+            try:
+                when_func(**when_args)
+            except:  # noqa: E722
+                excinfo = ExceptionInfo.from_current()
+
+            then_func = blocks.get("then")
+            if then_func is None:
+                return
+            funcargs["excinfo"] = excinfo
+            then_argnames = Code.from_function(then_func).getargs()
+            then_args = {arg: funcargs[arg] for arg in then_argnames}
+            then_func(**then_args)
 
 
 def generate_spock_functions(
