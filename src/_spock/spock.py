@@ -17,6 +17,7 @@ from _pytest.python import Module
 from _pytest.python import PyCollector
 
 from .exceptions import UnableEvalParams
+from .helper import Box
 from .helper import get_functions_in_function
 from .param_table import ParamTable
 from .parameter import Parameter
@@ -30,14 +31,31 @@ class SpockFunction(Function):
 
         testfunc = self.obj
         blocks = get_functions_in_function(testfunc)
-        for block_name in ["given", "when", "then", "expect", "cleanup"]:
+
+        if "given" in blocks:
+            given_func = blocks["given"]
+            given_argnames = Code.from_function(given_func).getargs()
+            given_args = {}
+            for argname in given_argnames:
+                if argname == "me":
+                    given_args["me"] = Box()
+                else:
+                    arg = self._request.getfixturevalue(argname)
+                    self.funcargs[argname] = arg
+                    given_args[argname] = arg
+
+            given_func(**given_args)
+            if given_args["me"]:
+                self.funcargs.update(given_args["me"]._data)
+
+        for block_name in ["when", "then", "expect", "cleanup"]:
             block_func = blocks.get(block_name)
             if block_func is None:
                 continue
-            block_args = Code.from_function(block_func).getargs()
-            for arg in block_args:
-                if arg not in self.funcargs:
-                    self.funcargs[arg] = self._request.getfixturevalue(arg)
+            block_argnames = Code.from_function(block_func).getargs()
+            for argname in block_argnames:
+                if argname not in self.funcargs:
+                    self.funcargs[argname] = self._request.getfixturevalue(argname)
 
     def runtest(self) -> None:
         testfunc = self.obj

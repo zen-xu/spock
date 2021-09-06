@@ -139,3 +139,47 @@ def test_table_params_eval_failed(pytester):
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(errors=1)
     assert pytester.inline_genitems()[0][0]._request.node.name == "test_spock[unable to eval 0 params]"
+
+
+def test_given_block(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def given(me):
+                me.a = 1
+                me.b = 2
+
+            def expect(a, b):
+                assert a < b
+        """
+    )
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=1)
+
+
+def test_given_block_with_fixture(pytester):
+
+    pytester.makepyfile(
+        """
+        import pytest
+
+        @pytest.mark.spock
+        def test_spock():
+            def given(me, tmpdir):
+                me.a = 1
+                me.b = 2
+                me.working_dir = tmpdir / "working"
+                me.working_dir.mkdir()
+
+            def expect(a, b, working_dir):
+                assert a < b
+
+                assert working_dir.exists()
+        """
+    )
+    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result.assert_outcomes(passed=1)
