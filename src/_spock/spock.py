@@ -95,7 +95,7 @@ def generate_spock_functions(
     for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
 
-            def failed(idx: int = idx) -> None:
+            def __spock_failed__(idx: int = idx) -> None:
 
                 raise ValueError(f"Unable to eval index {idx} params")  # pragma: no cover
 
@@ -103,7 +103,7 @@ def generate_spock_functions(
             yield SpockFunction.from_parent(
                 collector,
                 name=id,
-                callobj=failed,
+                callobj=__spock_failed__,
                 keywords={id: True},
                 originalname=name,
             )
