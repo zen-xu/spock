@@ -4,7 +4,7 @@ from _spock.spock import generate_arguments
 
 def test_generate_arguments_with_table_style_func():
     def values(_, a, b):
-        _ / a / b
+        _ | a | b
         _ | 1 | 2
         _ | 3 | 4
 
@@ -27,7 +27,7 @@ def test_generate_arguments_with_pipe_style_func():
 
 def test_generate_arguments_with_table_style_failed():
     def values(_, a, b):
-        _ / a / b
+        _ | a | b
         _ | 1 | b
         _ | 3 | 4
 
@@ -49,7 +49,7 @@ def test_spock_function_with_where_block(pytester):
                 assert a <= b
 
             def where(_, a, b):
-                _ / a / b
+                _ | a | b
                 _ | 1 | 2
                 _ | 3 | 4
                 _ | 7 | 6
@@ -73,7 +73,7 @@ def test_spock_method_with_where_block(pytester):
                     assert a <= b
 
                 def where(_, a, b):
-                    _ / a / b
+                    _ | a | b
                     _ | 1 | 2
                     _ | 3 | 4
                     _ | 7 | 6
@@ -148,7 +148,7 @@ def test_table_params_eval_failed(pytester):
                 assert a <= b
 
             def where(_, a, b):
-                _ / a / b
+                _ | a | b
                 _ | 1 | b
         """
     )

@@ -12,6 +12,7 @@ from typing import Iterable
 from typing import Iterator
 from typing import List
 from typing import Optional
+from typing import Set
 
 from .parameter import Parameter
 
@@ -21,16 +22,17 @@ class ParamTable(Iterable):
         self.columns: List[List[Parameter]] = [[]]
         self.arguments_mapping: DefaultDict[str, List[Any]] = defaultdict(list)
         self.current_columns_generate: Optional[cycle[Parameter]] = None
-
-    def __truediv__(self, param: Parameter) -> ParamTable:
-        if self.current_columns_generate is not None:
-            self.current_columns_generate = None
-            self.columns.append([])
-
-        self.columns[-1].append(param)
-        return self
+        self.seen_param_names: Set[str] = set()
 
     def __or__(self, arg: Any) -> ParamTable:
+        if isinstance(arg, Parameter) and arg.__name__ not in self.seen_param_names:
+            self.seen_param_names.add(arg.__name__)
+            if self.current_columns_generate is not None:
+                self.current_columns_generate = None
+                self.columns.append([])
+            self.columns[-1].append(arg)
+            return self
+
         # enable Parameter __accept_expression__
         for column in chain(*self.columns):
             column.__accept_expression__ = True

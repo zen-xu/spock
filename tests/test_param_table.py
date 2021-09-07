@@ -26,11 +26,11 @@ def c():
 
 class TestParamTable:
     def test_declare_header(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b / c
+        table | a | b | c
         assert table.columns[-1] == [a, b, c]
 
     def test_add_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b / c
+        table | a | b | c
         table | 1 | 2 | 3
         table | 4 | 5 | 6
 
@@ -41,10 +41,10 @@ class TestParamTable:
         assert list(table) == [(1, 2, 3), (4, 5, 6)]
 
     def test_declare_header_in_multi_sections(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b  # section 1
+        table | a | b  # section 1
         table | 1 | 2
         table | 4 | 5
-        table / c  # section 2
+        table | c  # section 2
         table | 3
         table | 6
 
@@ -55,19 +55,19 @@ class TestParamTable:
         assert list(table) == [(1, 2, 3), (4, 5, 6)]
 
     def test_args_section1_has_more_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b  # section 1
+        table | a | b  # section 1
         table | 1 | 2
         table | 4 | 5
-        table / c  # section 2
+        table | c  # section 2
         table | 3
 
         assert list(table) == [(1, 2, 3), (4, 5, None)]
 
     def test_args_section1_has_less_args(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b  # section 1
+        table | a | b  # section 1
         table | 1 | 2
         table | 4 | 5
-        table / c  # section 2
+        table | c  # section 2
         table | 3
         table | 6
         table | 7
@@ -75,7 +75,7 @@ class TestParamTable:
         assert list(table) == [(1, 2, 3), (4, 5, 6), (None, None, 7)]
 
     def test_table_to_dict(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b / c
+        table | a | b | c
         table | 1 | 2 | 3
         table | 4 | 5 | 6
         table | 7 | 8 | 9
@@ -87,12 +87,12 @@ class TestParamTable:
         ]
 
     def test_table_to_dict_with_params(self, table: ParamTable, a: Parameter, b: Parameter, c: Parameter):
-        table / a / b
+        table | a | b
         table | 1 | a + 1
         table | b | 5
         table | 7 | 8
 
-        table / c
+        table | c
         table | 3
         table | 6
         table | a + 2
