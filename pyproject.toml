@@ -11,7 +11,7 @@ packages = [
     { include = "_spock", from = "src" },
 ]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 4 - Beta",
     "Framework :: Pytest",
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS :: MacOS X",
