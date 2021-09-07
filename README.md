@@ -26,3 +26,27 @@
     <img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/zen-xu/spock.svg/?label=active+issues&show_trend=true&token=mgZ7FgiJDAxSt9Ilav9vLFEo"/>
   </a>
 </div>
+
+`pyspock` is a BDD-style developer testing and specification framework for Python, and this is an implementation of the [`spock`](https://github.com/spockframework/spock).
+
+An example of simple bdd test:
+
+```python
+import pytest
+
+
+@pytest.mark.spock("maximum of {a} and {b} is {c}")
+def test_maximum():
+    def expect(a, b, c):
+        assert max(a, b) == c
+
+    def where(_, a, b, c):
+        _ | a | b | c
+        _ | 3 | 7 | 7
+        _ | 5 | 4 | 5
+        _ | 9 | 9 | 9
+```
+
+If you are using vscode, you can find there will be 3 test cases.
+
+![vscode-test-discovery](doc/en/img/vscode-testing-discovery.png)
