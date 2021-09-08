@@ -132,7 +132,7 @@ def test_spock_missing_expect_block(pytester):
         """
     )
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
-    result.assert_outcomes(passed=2)
+    result.assert_outcomes(failed=2)
 
 
 def test_table_params_eval_failed(pytester):
@@ -276,4 +276,4 @@ def test_when_and_then_blocks(pytester):
     )
 
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
-    result.assert_outcomes(passed=5)
+    result.assert_outcomes(passed=4, failed=1)

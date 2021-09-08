@@ -79,6 +79,10 @@ class SpockFunction(Function):
     def runtest(self) -> None:
         testfunc = self.obj
         blocks = get_functions_in_function(testfunc)
+
+        if "expect" not in blocks and "then" not in blocks:
+            raise RuntimeError("No `expect` or `then` block found")
+
         if "expect" in blocks:
             expect_func = blocks["expect"]
             expect_argnames = Code.from_function(expect_func).getargs()
