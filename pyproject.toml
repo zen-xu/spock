@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyspock"
-version = "0.2.0"
+version = "0.3.0"
 description = "Python implementation for spock framework"
 authors = ["ZhengYu, Xu <zen-xu@outlook.com>"]
 license = "MIT"
@@ -86,7 +86,7 @@ exclude_lines = [
 
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.2.0"
+version = "0.3.0"
 version_files = [
     "pyproject.toml:version",
     "src/_spock/__init__.py",
