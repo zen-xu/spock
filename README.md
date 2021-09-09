@@ -263,7 +263,7 @@ def where(_, a, b, c):
     # fmt: off
     _ | a | b     | c
     _ | 5 | a + 1 | 4
-    _ | 3 | a + 2 | 2
+    _ | 3 | a + c | 2
     # fmt: on
 ```
 
