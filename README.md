@@ -257,7 +257,7 @@ def where(_, a, b):
 
 variable supports all operators like `+`, `-`, `*`, `/`, `%`, `**`, `//`, `==`, `!=`, `<`, `<=`, `>`, `>=` and so on.
 
-#### adapter black
+#### Compatibility with black
 
 if you are using `black`, you should close fmt when use data table.
 
