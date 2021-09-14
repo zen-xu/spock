@@ -245,6 +245,6 @@ def where(_, a, b, c):
 | **given**   | ✅                | `me`             | ✅                          |
 | **when**    | ✅                | ❎                | ✅                          |
 | **then**    | ✅                | `excinfo`        | when `expect` block exists |
-| **expect**  | ❎                | ❎                | when `then` block exists   |
+| **expect**  | ✅                | ❎                | when `then` block exists   |
 | **cleanup** | ✅                | ❎                | ✅                          |
-| **where**   | ✅                | `_`              | ✅                          |
+| **where**   | ❎                | `_`              | ✅                          |
