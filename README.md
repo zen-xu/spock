@@ -25,6 +25,9 @@
   <a href="https://deepsource.io/gh/zen-xu/spock/?ref=repository-badge}" target="_blank">
     <img alt="DeepSource" title="DeepSource" src="https://deepsource.io/gh/zen-xu/spock.svg/?label=active+issues&show_trend=true&token=mgZ7FgiJDAxSt9Ilav9vLFEo"/>
   </a>
+  <a href="https://pepy.tech/project/pyspock">
+    <img src="https://pepy.tech/badge/pyspock/month"/>
+  </a>
 </div>
 
 `pyspock` is a BDD-style developer testing and specification framework for Python, and this is an implementation of the [`spock`](https://github.com/spockframework/spock).
