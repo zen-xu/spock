@@ -60,7 +60,7 @@ class TestParameter:
             (lambda a: a / 2, 5, 2.5),
             (lambda a: a // 2, 5, 2),
             (lambda a: a % 2, 5, 1),
-            (lambda a: a ** 2, 5, 25),
+            (lambda a: a**2, 5, 25),
             (lambda a: a << 1, 5, 10),
             (lambda a: a >> 1, 5, 2),
             (lambda a: a & 1, 5, 1),
@@ -84,7 +84,7 @@ class TestParameter:
             (lambda a, b: a + b, (4, 5), 9),
             (lambda a, b: a - b * 4, (50, 2), 42),
             (lambda a, _: a + a, (4, 9), 8),
-            (lambda a, b: a + (b ** 4) // 2 << 3, (4, 2), 96),
+            (lambda a, b: a + (b**4) // 2 << 3, (4, 2), 96),
         ],
     )
     def test_multi_params(
@@ -114,7 +114,7 @@ def test_declare():
         (lambda a: a / 2, 5, 2.5),
         (lambda a: a // 2, 5, 2),
         (lambda a: a % 2, 5, 1),
-        (lambda a: a ** 2, 5, 25),
+        (lambda a: a**2, 5, 25),
         (lambda a: a << 1, 5, 10),
         (lambda a: a >> 1, 5, 2),
         (lambda a: a & 1, 5, 1),
