@@ -156,7 +156,8 @@ def generate_spock_functions(
             id = f"{name}[{id}]"
 
             def get_arg(argname):
-                return lambda: argument[argname]  # type: ignore # noqa: B023
+                value = argument[argname]  # type: ignore # noqa: B023
+                return lambda: value
 
             fixtureinfo = fixtures.FuncFixtureInfo(
                 argnames=argnames,
