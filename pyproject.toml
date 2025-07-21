@@ -1,6 +1,6 @@
 [project]
 name = "pyspock"
-version = "0.3.0"
+version = "0.4.0"
 authors = [{ name = "ZhengYu, Xu", email = "zen-xu@outlook.com" }]
 description = "Python implementation for spock framework"
 readme = "README.md"
