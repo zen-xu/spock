@@ -3,7 +3,7 @@ import pytest
 from _pytest.config import Config
 from _pytest.python import PyCollector
 
-from _spock.spock import generate_spock_functions
+from .spock import generate_spock_functions
 
 
 @pytest.hookimpl

@@ -2,8 +2,8 @@
 
 import pytest
 
-from _spock.helper import get_function_names
-from _spock.helper import get_functions_in_function
+from spock.helper import get_function_names
+from spock.helper import get_functions_in_function
 
 
 def func1():
@@ -119,7 +119,7 @@ def test_handle_global_var1():
 
 
 def test_box():
-    from _spock.helper import Box
+    from spock.helper import Box
 
     box = Box()
     box.a = 1

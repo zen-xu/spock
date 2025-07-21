@@ -1,5 +1,5 @@
-from _spock.exceptions import UnableEvalParams
-from _spock.spock import generate_arguments
+from spock.exceptions import UnableEvalParams
+from spock.spock import generate_arguments
 
 
 def test_generate_arguments_with_table_style_func():

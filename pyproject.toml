@@ -29,14 +29,14 @@ classifiers = [
 dependencies = ["pytest>=8"]
 
 [project.entry-points.pytest11]
-spock = "_spock.plugin"
+spock = "spock.plugin"
 
 [build-system]
 requires = ["uv_build>=0.8.0,<0.9.0"]
 build-backend = "uv_build"
 
 [tool.uv.build-backend]
-module-name = ["_spock", "spock"]
+module-name = ["spock"]
 
 [tool.ruff]
 extend-exclude = ["docs/*"]
@@ -71,6 +71,6 @@ unfixable = [
 
 [tool.ruff.lint.isort]
 force-single-line = true
-known-first-party = ["spock", "_spock"]
+known-first-party = ["spock"]
 lines-after-imports = 2
 lines-between-types = 1
