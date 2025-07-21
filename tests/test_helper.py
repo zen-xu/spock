@@ -1,3 +1,5 @@
+# ruff: noqa: RUF012
+
 import pytest
 
 from _spock.helper import get_function_names
@@ -46,7 +48,7 @@ class Class:
         c,
     ):
         def func():
-            return [3] + cls.data2
+            return [3, *cls.data2]
 
     @staticmethod
     def c():
@@ -64,7 +66,7 @@ def test_get_functions_in_method():
 
 def test_get_functions_in_classmethod():
     funcs = get_functions_in_function(Class.b)
-    assert funcs["func"]() == [3] + Class.data2
+    assert funcs["func"]() == [3, *Class.data2]
     assert funcs["func"].__code__.co_firstlineno == 48
     assert funcs["func"].__code__.co_filename == __file__
 

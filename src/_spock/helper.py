@@ -4,8 +4,6 @@ import sys
 
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
 
 from _pytest._code.code import Code
 from _pytest._code.source import Source
@@ -16,9 +14,9 @@ LESS_PY38 = sys.version_info <= (3, 8)
 
 def get_functions_in_function(
     func: Callable,
-) -> Dict[str, Callable]:
+) -> dict[str, Callable]:
     """Return functions contained in the passed function."""
-    context: Dict[str, Any] = getattr(func, "__globals__", {})
+    context: dict[str, Any] = getattr(func, "__globals__", {})
 
     code = Code.from_function(func)
     args = code.getargs()
@@ -77,14 +75,14 @@ def get_functions_in_function(
     return context
 
 
-def get_function_names(source: str) -> List[str]:
+def get_function_names(source: str) -> list[str]:
     source = Source(source).deindent()  # type: ignore
     bodies = ast.parse(str(source)).body
     return [body.name for body in bodies if isinstance(body, ast.FunctionDef)]
 
 
 class Box:
-    _data: Dict[str, Any]
+    _data: dict[str, Any]
 
     def __new__(cls) -> "Box":
         box = super().__new__(cls)

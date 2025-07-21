@@ -20,9 +20,6 @@ def pytest_pycollect_makeitem(collector: PyCollector, name: str, obj: object):
     ]
     if spock_marks:
         mark = spock_marks[0]
-        if mark.args:
-            message = mark.args[0]
-        else:
-            message = None
+        message = mark.args[0] if mark.args else None
         return list(generate_spock_functions(collector, name, obj, message))
     return None
