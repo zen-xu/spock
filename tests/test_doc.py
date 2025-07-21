@@ -43,7 +43,7 @@ def test_append_element():
 @pytest.mark.spock
 def test_zero_division():
     def when():
-        1 / 0
+        1 / 0  # noqa: B018
 
     def then(excinfo):
         assert excinfo.type is ZeroDivisionError
@@ -61,7 +61,7 @@ def test_maximum2():
 @pytest.mark.spock
 def test_file():
     def given(me, tmpdir):
-        me.file = open(tmpdir / "test.txt", "w+")
+        me.file = open(tmpdir / "test.txt", "w+")  # noqa: SIM115
 
     def when(file):
         file.write("hello")

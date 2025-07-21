@@ -1,10 +1,6 @@
 from collections.abc import Iterable
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Union
 
 from _pytest import fixtures
 from _pytest._code.code import Code
@@ -95,7 +91,7 @@ class SpockFunction(Function):
             funcargs = dict(self.funcargs)
             when_argnames = Code.from_function(when_func).getargs()
             when_args = {arg: funcargs[arg] for arg in when_argnames}
-            excinfo: Optional[ExceptionInfo] = None
+            excinfo: ExceptionInfo | None = None
             try:
                 when_func(**when_args)
             except:  # noqa: E722
@@ -111,7 +107,7 @@ class SpockFunction(Function):
 
 
 def generate_spock_functions(
-    collector: PyCollector, name: str, obj: object, message: Optional[str]
+    collector: PyCollector, name: str, obj: object, message: str | None
 ) -> Iterable[SpockFunction]:
     blocks = get_functions_in_function(obj)  # type: ignore
     where_block = blocks.get("where")
@@ -140,7 +136,7 @@ def generate_spock_functions(
     for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
 
-            def __spock_failed__(idx: int = idx) -> None:
+            def __spock_failed__(idx: int = idx) -> None:  # noqa: N807
                 raise ValueError(
                     f"Unable to eval index {idx} params"
                 )  # pragma: no cover
@@ -201,7 +197,7 @@ def generate_spock_functions(
             )
 
 
-def generate_arguments(func: Callable) -> List[Union[Dict[str, Any], UnableEvalParams]]:
+def generate_arguments(func: Callable) -> list[dict[str, Any] | UnableEvalParams]:
     code = Code.from_function(func)
     arg_names = code.getargs()
 
@@ -214,7 +210,7 @@ def generate_arguments(func: Callable) -> List[Union[Dict[str, Any], UnableEvalP
     params["_"] = table  # type: ignore
     func(**params)
     args = table.to_dict()
-    result: List[Union[Dict[str, Any], UnableEvalParams]] = []
+    result: list[dict[str, Any] | UnableEvalParams] = []
     for arg in args:
         try:
             result.append(eval_params(**arg))

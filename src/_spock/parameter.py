@@ -5,11 +5,6 @@ import operator as op
 from collections.abc import Iterable
 from typing import Any
 from typing import Callable
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Tuple
-from typing import Union
 
 from .exceptions import UnableEvalParams
 
@@ -17,7 +12,7 @@ from .exceptions import UnableEvalParams
 class Parameter:
     def __init__(self, name: str) -> None:
         self.__name__ = name
-        self.__param_arguments__: List[Any] = []
+        self.__param_arguments__: list[Any] = []
         self.__accept_expression__: bool = False
 
     def __repr__(self) -> str:
@@ -28,9 +23,7 @@ class Parameter:
     def __call__(self, **kwargs: Any) -> Any:
         return kwargs[self.__name__]
 
-    def __build_expression__(
-        self, func: Callable, rv: Optional[Any] = None
-    ) -> Expression:
+    def __build_expression__(self, func: Callable, rv: Any = None) -> Expression:
         if not self.__accept_expression__:
             raise BuildExpressionError("only support build expression in table")
 
@@ -83,7 +76,7 @@ class Parameter:
     def __pow__(self, rv: Any) -> Expression:
         return self.__build_expression__(op.pow, rv)
 
-    def __lshift__(self, rv: Any) -> Union[Parameter, Expression]:
+    def __lshift__(self, rv: Any) -> Parameter | Expression:
         if self.__accept_expression__:
             return self.__build_expression__(op.lshift, rv)
 
@@ -130,9 +123,7 @@ class Expression:
     def __init__(self, func: Callable) -> None:
         self.__func__ = func
 
-    def __rebuild_expression__(
-        self, func: Callable, rv: Optional[Any] = None
-    ) -> Expression:
+    def __rebuild_expression__(self, func: Callable, rv: Any = None) -> Expression:
         self_func = self.__func__
 
         if rv is None:
@@ -227,7 +218,7 @@ class Expression:
         return self.__rebuild_expression__(op.ne, rv)
 
 
-def declare(*param_names: str) -> Tuple[Parameter, ...]:
+def declare(*param_names: str) -> tuple[Parameter, ...]:
     return tuple(Parameter(name) for name in param_names)
 
 
@@ -239,7 +230,7 @@ class AddArgumentsFailed(Exception):
     """add arguments failed"""
 
 
-def zip_parameters_values(*params: Parameter) -> List[Dict[str, Any]]:
+def zip_parameters_values(*params: Parameter) -> list[dict[str, Any]]:
     max_len = max(len(param.__param_arguments__) for param in params)
     result = []
     for i in range(max_len):
@@ -254,7 +245,7 @@ def zip_parameters_values(*params: Parameter) -> List[Dict[str, Any]]:
     return result
 
 
-def eval_params(**args: Any) -> Dict[str, Any]:
+def eval_params(**args: Any) -> dict[str, Any]:
     expression_or_params = {}
     normal_args = {}
 

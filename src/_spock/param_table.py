@@ -8,21 +8,16 @@ from collections.abc import Iterator
 from itertools import chain
 from itertools import cycle
 from typing import Any
-from typing import DefaultDict
-from typing import Dict
-from typing import List
-from typing import Optional
-from typing import Set
 
 from .parameter import Parameter
 
 
 class ParamTable(Iterable):
     def __init__(self) -> None:
-        self.columns: List[List[Parameter]] = [[]]
-        self.arguments_mapping: DefaultDict[str, List[Any]] = defaultdict(list)
-        self.current_columns_generate: Optional[cycle[Parameter]] = None
-        self.seen_param_names: Set[str] = set()
+        self.columns: list[list[Parameter]] = [[]]
+        self.arguments_mapping: defaultdict[str, list[Any]] = defaultdict(list)
+        self.current_columns_generate: cycle[Parameter] | None = None
+        self.seen_param_names: set[str] = set()
 
     def __or__(self, arg: Any) -> ParamTable:
         if isinstance(arg, Parameter) and arg.__name__ not in self.seen_param_names:
@@ -56,7 +51,7 @@ class ParamTable(Iterable):
                 items.append(arg)
             yield tuple(items)
 
-    def to_dict(self) -> List[Dict[str, Any]]:
+    def to_dict(self) -> list[dict[str, Any]]:
         return [
             dict(
                 zip((column.__name__ for column in itertools.chain(*self.columns)), row)
