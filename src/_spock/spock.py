@@ -1,17 +1,15 @@
-from collections.abc import Iterable
-from typing import Any
-from typing import Callable
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from _pytest import fixtures
 from _pytest._code.code import Code
 from _pytest._code.code import ExceptionInfo
 from _pytest.python import CallSpec2
-from _pytest.python import Class
 from _pytest.python import Function
-from _pytest.python import FunctionDefinition
-from _pytest.python import Metafunc
 from _pytest.python import Module
 from _pytest.python import PyCollector
+from _pytest.scope import Scope
 
 from .exceptions import UnableEvalParams
 from .helper import Box
@@ -20,6 +18,12 @@ from .param_table import ParamTable
 from .parameter import Parameter
 from .parameter import eval_params
 from .parameter import zip_parameters_values
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable
+    from typing import Any
+    from typing import Callable
 
 
 class SpockFunction(Function):
@@ -107,7 +111,10 @@ class SpockFunction(Function):
 
 
 def generate_spock_functions(
-    collector: PyCollector, name: str, obj: object, message: str | None
+    collector: PyCollector,
+    name: str,
+    obj: object,
+    message: str | None,
 ) -> Iterable[SpockFunction]:
     blocks = get_functions_in_function(obj)  # type: ignore
     where_block = blocks.get("where")
@@ -123,15 +130,6 @@ def generate_spock_functions(
     module_col = collector.getparent(Module)
     if module_col is None:
         raise ValueError("module can't be None")  # pragma: no cover
-    module = module_col.obj
-    cls_col = collector.getparent(Class)
-    cls = cls_col.obj if cls_col else None
-    fm = collector.session._fixturemanager
-
-    definition = FunctionDefinition.from_parent(collector, name=name, callobj=obj)
-    metafunc = Metafunc(
-        definition, definition._fixtureinfo, collector.config, cls=cls, module=module
-    )
 
     for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
@@ -163,27 +161,27 @@ def generate_spock_functions(
                 name2fixturedefs={
                     argname: [
                         fixtures.FixtureDef(
-                            fixturemanager=fm,
+                            config=collector.config,
                             baseid=name,
                             argname=argname,
                             params=list(argument.values()),
-                            func=fixtures.get_direct_param_fixture_func,
+                            func=fixtures._get_direct_parametrize_args,
                             scope="function",
+                            _ispytest=True,
                         )
                     ]
                     for argname in argnames
                 },
             )
-
-            callspec = CallSpec2(metafunc)
-            callspec.setmulti2(
-                dict.fromkeys(argnames, "params"),
-                argnames,
-                argument.values(),
-                id,
-                [],
-                4,
-                idx,
+            callspec = CallSpec2()
+            callspec.setmulti(
+                argnames=argnames,
+                valset=argument.values(),
+                id=id,
+                marks=[],
+                scope=Scope.Function,
+                param_index=idx,
+                nodeid=collector.nodeid,
             )
 
             yield SpockFunction.from_parent(
