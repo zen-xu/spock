@@ -6,7 +6,7 @@
   </a>
   <a href="https://github.com/astral-sh/uv">
     <img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json" alt="uv" style="max-width:100%;">
-  </a>  
+  </a>
   <a href="https://github.com/zen-xu/spock/actions">
     <img src="https://github.com/zen-xu/spock/actions/workflows/test.yaml/badge.svg" alt="CI"/>
   </a>
@@ -19,7 +19,7 @@
   </a>
   <a href="https://pepy.tech/project/pyspock">
     <img src="https://pepy.tech/badge/pyspock/month"/>
-  </a>  
+  </a>
 </div>
 
 `pyspock` is a BDD-style developer testing and specification framework for Python, and this is an implementation of the [`spock`](https://github.com/spockframework/spock).
