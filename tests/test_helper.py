@@ -60,21 +60,21 @@ def test_get_functions_in_method():
     obj = Class()
     funcs = get_functions_in_function(obj.a)
     assert funcs["func"]() == 1 + obj.data1
-    assert funcs["func"].__code__.co_firstlineno == 38
+    assert funcs["func"].__code__.co_firstlineno == 40
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_classmethod():
     funcs = get_functions_in_function(Class.b)
     assert funcs["func"]() == [3, *Class.data2]
-    assert funcs["func"].__code__.co_firstlineno == 48
+    assert funcs["func"].__code__.co_firstlineno == 50
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_staticmethod():
     funcs = get_functions_in_function(Class.c)
     assert funcs["func"]() == "abc"
-    assert funcs["func"].__code__.co_firstlineno == 53
+    assert funcs["func"].__code__.co_firstlineno == 55
     assert funcs["func"].__code__.co_filename == __file__
 
 

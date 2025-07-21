@@ -154,6 +154,10 @@ def generate_spock_functions(
                 id = "-".join(map(str, argument.values()))
 
             id = f"{name}[{id}]"
+
+            def get_arg(argname):
+                return lambda: argument[argname]  # type: ignore # noqa: B023
+
             fixtureinfo = fixtures.FuncFixtureInfo(
                 argnames=argnames,
                 initialnames=argnames,
@@ -164,8 +168,8 @@ def generate_spock_functions(
                             config=collector.config,
                             baseid=name,
                             argname=argname,
-                            params=list(argument.values()),
-                            func=fixtures._get_direct_parametrize_args,
+                            params=None,
+                            func=get_arg(argname),
                             scope="function",
                             _ispytest=True,
                         )
@@ -174,7 +178,7 @@ def generate_spock_functions(
                 },
             )
             callspec = CallSpec2()
-            callspec.setmulti(
+            callspec = callspec.setmulti(
                 argnames=argnames,
                 valset=argument.values(),
                 id=id,
