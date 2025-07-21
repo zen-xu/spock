@@ -3,14 +3,14 @@ from typing import Callable
 
 import pytest
 
-from _spock.exceptions import UnableEvalParams
-from _spock.parameter import AddArgumentsFailed
-from _spock.parameter import BuildExpressionError
-from _spock.parameter import Expression
-from _spock.parameter import Parameter
-from _spock.parameter import declare
-from _spock.parameter import eval_params
-from _spock.parameter import zip_parameters_values
+from spock.exceptions import UnableEvalParams
+from spock.parameter import AddArgumentsFailed
+from spock.parameter import BuildExpressionError
+from spock.parameter import Expression
+from spock.parameter import Parameter
+from spock.parameter import declare
+from spock.parameter import eval_params
+from spock.parameter import zip_parameters_values
 
 
 @pytest.fixture(scope="function")

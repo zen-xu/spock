@@ -3,7 +3,7 @@ import pytest
 from _pytest.config import Config
 from _pytest.python import PyCollector
 
-from _spock.spock import generate_spock_functions
+from .spock import generate_spock_functions
 
 
 @pytest.hookimpl
@@ -13,7 +13,7 @@ def pytest_configure(config: Config):
     )
 
 
-@pytest.mark.tryfirst
+@pytest.hookimpl(tryfirst=True)
 def pytest_pycollect_makeitem(collector: PyCollector, name: str, obj: object):
     spock_marks = [
         mark for mark in getattr(obj, "pytestmark", []) if mark.name == "spock"

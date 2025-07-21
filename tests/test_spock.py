@@ -1,5 +1,5 @@
-from _spock.exceptions import UnableEvalParams
-from _spock.spock import generate_arguments
+from spock.exceptions import UnableEvalParams
+from spock.spock import generate_arguments
 
 
 def test_generate_arguments_with_table_style_func():
@@ -54,7 +54,7 @@ def test_spock_function_with_where_block(pytester):
                 _ | 7 | 6
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=2, failed=1)
 
 
@@ -77,7 +77,7 @@ def test_spock_method_with_where_block(pytester):
                     _ | 7 | 6
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=2, failed=1)
 
 
@@ -95,7 +95,7 @@ def test_spock_function_with_fixture(pytester):
                 filename << ["a", "b"]
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=2)
 
 
@@ -111,7 +111,7 @@ def test_spock_missing_where_block(pytester):
         """
     )
 
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=1)
 
 
@@ -126,7 +126,7 @@ def test_spock_missing_expect_block(pytester):
                 filename << ["a", "b"]
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(failed=2)
 
 
@@ -146,7 +146,7 @@ def test_table_params_eval_failed(pytester):
                 _ | 1 | b
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(errors=1)
     assert (
         pytester.inline_genitems()[0][0]._request.node.name
@@ -169,7 +169,7 @@ def test_given_block(pytester):
                 assert a < b
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=1)
 
 
@@ -192,7 +192,7 @@ def test_given_block_with_fixture(pytester):
                 assert working_dir.exists()
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=1)
 
 
@@ -213,7 +213,7 @@ def test_cleanup_block(pytester):
                 working_dir.remove()
         """
     )
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=1)
 
 
@@ -268,5 +268,5 @@ def test_when_and_then_blocks(pytester):
         """
     )
 
-    result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
+    result = pytester.runpytest()
     result.assert_outcomes(passed=4, failed=1)

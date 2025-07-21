@@ -2,8 +2,8 @@
 
 import pytest
 
-from _spock.helper import get_function_names
-from _spock.helper import get_functions_in_function
+from spock.helper import get_function_names
+from spock.helper import get_functions_in_function
 
 
 def func1():
@@ -60,21 +60,21 @@ def test_get_functions_in_method():
     obj = Class()
     funcs = get_functions_in_function(obj.a)
     assert funcs["func"]() == 1 + obj.data1
-    assert funcs["func"].__code__.co_firstlineno == 38
+    assert funcs["func"].__code__.co_firstlineno == 40
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_classmethod():
     funcs = get_functions_in_function(Class.b)
     assert funcs["func"]() == [3, *Class.data2]
-    assert funcs["func"].__code__.co_firstlineno == 48
+    assert funcs["func"].__code__.co_firstlineno == 50
     assert funcs["func"].__code__.co_filename == __file__
 
 
 def test_get_functions_in_staticmethod():
     funcs = get_functions_in_function(Class.c)
     assert funcs["func"]() == "abc"
-    assert funcs["func"].__code__.co_firstlineno == 53
+    assert funcs["func"].__code__.co_firstlineno == 55
     assert funcs["func"].__code__.co_filename == __file__
 
 
@@ -119,7 +119,7 @@ def test_handle_global_var1():
 
 
 def test_box():
-    from _spock.helper import Box
+    from spock.helper import Box
 
     box = Box()
     box.a = 1

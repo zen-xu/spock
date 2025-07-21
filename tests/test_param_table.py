@@ -1,7 +1,7 @@
 import pytest
 
-from _spock.param_table import ParamTable
-from _spock.parameter import Parameter
+from spock.param_table import ParamTable
+from spock.parameter import Parameter
 
 
 @pytest.fixture(scope="function")
