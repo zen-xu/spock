@@ -74,7 +74,9 @@ class TestParameter:
             (lambda a: a != 5, 6, True),
         ],
     )
-    def test_operator(self, a: Parameter, exp: Callable[[Parameter], Any], arg: Any, expected: Any):
+    def test_operator(
+        self, a: Parameter, exp: Callable[[Parameter], Any], arg: Any, expected: Any
+    ):
         a.__accept_expression__ = True
         assert exp(a)(a=arg) == expected
 
@@ -88,7 +90,12 @@ class TestParameter:
         ],
     )
     def test_multi_params(
-        self, a: Parameter, b: Parameter, exp: Callable[[Parameter, Parameter], Any], arg: Any, expected: Any
+        self,
+        a: Parameter,
+        b: Parameter,
+        exp: Callable[[Parameter, Parameter], Any],
+        arg: Any,
+        expected: Any,
     ):
         a.__accept_expression__ = True
         b.__accept_expression__ = True

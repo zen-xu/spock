@@ -31,7 +31,7 @@ def get_functions_in_function(
     body_statement_lineno = 0
     while True:
         statement = source.getstatement(body_statement_lineno).deindent()
-        if any(("def " in line for line in statement.lines)):  # see deepsource PTC-W0016
+        if any("def " in line for line in statement.lines):  # see deepsource PTC-W0016
             body_statement_lineno += len(statement.lines)
             break
         body_statement_lineno += 1
@@ -41,7 +41,11 @@ def get_functions_in_function(
     co = compile(str(body), str(filename), "exec")
 
     eval(co, context)  # skipcq: PYL-W0123
-    context = {k: v for k, v in context.items() if inspect.isfunction(v) and k in get_function_names(str(body))}
+    context = {
+        k: v
+        for k, v in context.items()
+        if inspect.isfunction(v) and k in get_function_names(str(body))
+    }
     for f in context.values():
         f_firstlineno = f.__code__.co_firstlineno + firstlineno
         if LESS_PY38:
@@ -65,7 +69,10 @@ def get_functions_in_function(
                 f.__code__.co_cellvars,
             )
         else:
-            f.__code__ = f.__code__.replace(co_filename=str(filename), co_firstlineno=f_firstlineno + body_firstlineno)
+            f.__code__ = f.__code__.replace(
+                co_filename=str(filename),
+                co_firstlineno=f_firstlineno + body_firstlineno,
+            )
 
     return context
 

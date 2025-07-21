@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import operator as op
 
+from collections.abc import Iterable
 from typing import Any
 from typing import Callable
 from typing import Dict
-from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Tuple
@@ -28,7 +28,9 @@ class Parameter:
     def __call__(self, **kwargs: Any) -> Any:
         return kwargs[self.__name__]
 
-    def __build_expression__(self, func: Callable, rv: Optional[Any] = None) -> Expression:
+    def __build_expression__(
+        self, func: Callable, rv: Optional[Any] = None
+    ) -> Expression:
         if not self.__accept_expression__:
             raise BuildExpressionError("only support build expression in table")
 
@@ -128,7 +130,9 @@ class Expression:
     def __init__(self, func: Callable) -> None:
         self.__func__ = func
 
-    def __rebuild_expression__(self, func: Callable, rv: Optional[Any] = None) -> Expression:
+    def __rebuild_expression__(
+        self, func: Callable, rv: Optional[Any] = None
+    ) -> Expression:
         self_func = self.__func__
 
         if rv is None:
@@ -138,7 +142,6 @@ class Expression:
                 return func(value)
 
         else:
-
             if isinstance(rv, Expression):
 
                 def new_func(**kwargs: Any) -> Any:

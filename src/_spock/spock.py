@@ -1,7 +1,7 @@
+from collections.abc import Iterable
 from typing import Any
 from typing import Callable
 from typing import Dict
-from typing import Iterable
 from typing import List
 from typing import Optional
 from typing import Union
@@ -133,14 +133,17 @@ def generate_spock_functions(
     fm = collector.session._fixturemanager
 
     definition = FunctionDefinition.from_parent(collector, name=name, callobj=obj)
-    metafunc = Metafunc(definition, definition._fixtureinfo, collector.config, cls=cls, module=module)
+    metafunc = Metafunc(
+        definition, definition._fixtureinfo, collector.config, cls=cls, module=module
+    )
 
     for idx, argument in enumerate(generate_arguments(where_block)):
         if isinstance(argument, UnableEvalParams):
 
             def __spock_failed__(idx: int = idx) -> None:
-
-                raise ValueError(f"Unable to eval index {idx} params")  # pragma: no cover
+                raise ValueError(
+                    f"Unable to eval index {idx} params"
+                )  # pragma: no cover
 
             id = f"{name}[unable to eval {idx} params]"
             yield SpockFunction.from_parent(
@@ -178,7 +181,7 @@ def generate_spock_functions(
 
             callspec = CallSpec2(metafunc)
             callspec.setmulti2(
-                {k: "params" for k in argnames},
+                dict.fromkeys(argnames, "params"),
                 argnames,
                 argument.values(),
                 id,

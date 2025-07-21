@@ -37,7 +37,6 @@ def test_generate_arguments_with_table_style_failed():
 
 
 def test_spock_function_with_where_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -60,7 +59,6 @@ def test_spock_function_with_where_block(pytester):
 
 
 def test_spock_method_with_where_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -84,7 +82,6 @@ def test_spock_method_with_where_block(pytester):
 
 
 def test_spock_function_with_fixture(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -103,7 +100,6 @@ def test_spock_function_with_fixture(pytester):
 
 
 def test_spock_missing_where_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -120,7 +116,6 @@ def test_spock_missing_where_block(pytester):
 
 
 def test_spock_missing_expect_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -136,7 +131,6 @@ def test_spock_missing_expect_block(pytester):
 
 
 def test_table_params_eval_failed(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -154,11 +148,13 @@ def test_table_params_eval_failed(pytester):
     )
     result = pytester.runpytest("-p", "no:cov", "-p", "no:sugar")
     result.assert_outcomes(errors=1)
-    assert pytester.inline_genitems()[0][0]._request.node.name == "test_spock[unable to eval 0 params]"
+    assert (
+        pytester.inline_genitems()[0][0]._request.node.name
+        == "test_spock[unable to eval 0 params]"
+    )
 
 
 def test_given_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -178,7 +174,6 @@ def test_given_block(pytester):
 
 
 def test_given_block_with_fixture(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -202,7 +197,6 @@ def test_given_block_with_fixture(pytester):
 
 
 def test_cleanup_block(pytester):
-
     pytester.makepyfile(
         """
         import pytest
@@ -224,7 +218,6 @@ def test_cleanup_block(pytester):
 
 
 def test_when_and_then_blocks(pytester):
-
     pytester.makepyfile(
         """
         import pytest

@@ -3,6 +3,6 @@ from _spock import __version__
 
 
 __all__ = [
-    "__version__",
     "__authors__",
+    "__version__",
 ]
