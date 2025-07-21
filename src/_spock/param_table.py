@@ -3,13 +3,13 @@ from __future__ import annotations
 import itertools
 
 from collections import defaultdict
+from collections.abc import Iterable
+from collections.abc import Iterator
 from itertools import chain
 from itertools import cycle
 from typing import Any
 from typing import DefaultDict
 from typing import Dict
-from typing import Iterable
-from typing import Iterator
 from typing import List
 from typing import Optional
 from typing import Set
@@ -57,4 +57,9 @@ class ParamTable(Iterable):
             yield tuple(items)
 
     def to_dict(self) -> List[Dict[str, Any]]:
-        return [dict(zip((column.__name__ for column in itertools.chain(*self.columns)), row)) for row in self]
+        return [
+            dict(
+                zip((column.__name__ for column in itertools.chain(*self.columns)), row)
+            )
+            for row in self
+        ]

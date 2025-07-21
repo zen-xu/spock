@@ -1,94 +1,76 @@
-[tool.poetry]
+[project]
 name = "pyspock"
 version = "0.3.0"
+authors = [{ name = "ZhengYu, Xu", email = "zen-xu@outlook.com" }]
 description = "Python implementation for spock framework"
-authors = ["ZhengYu, Xu <zen-xu@outlook.com>"]
-license = "MIT"
 readme = "README.md"
-keywords = ["test", "unittest", "spock", "bdd"]
-packages = [
-    { include = "spock", from = "src" },
-    { include = "_spock", from = "src" },
-]
+requires-python = ">=3.9,<4"
 classifiers = [
     "Development Status :: 4 - Beta",
-    "Framework :: Pytest",
+    "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
-    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
     "Operating System :: POSIX",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
-    "Programming Language :: Python :: 3.8",
+    "Operating System :: Unix",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Testing",
     "Topic :: Software Development :: Testing :: BDD",
-    "Topic :: Utilities"
+    "Topic :: Utilities",
+    "Framework :: Pytest",
 ]
+dependencies = ["pytest>=8"]
 
-[tool.poetry.dependencies]
-python = "^3.7"
-pytest = "^6.2.4"
-
-[tool.poetry.dev-dependencies]
-pytest-cov = "^2.12.1"
-pytest-sugar = "^0.9.4"
-commitizen = "^2.17.13"
-black = "^21.7b0"
-flake8 = "^3.9.2"
-isort = "^5.9.3"
-mypy = "^0.910"
-
-[tool.poetry.plugins.pytest11]
+[project.entry-points.pytest11]
 spock = "_spock.plugin"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.8.0,<0.9.0"]
+build-backend = "uv_build"
 
-[tool.isort]
-profile = "black"
-force_single_line = true
-atomic = true
-include_trailing_comma = true
-lines_after_imports = 2
-lines_between_types = 1
-use_parentheses = true
-src_paths = ["tests"]
-filter_files = true
+[tool.uv.build-backend]
+module-name = ["_spock", "spock"]
 
-[tool.black]
-line-length = 120
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | tests/.*/setup.py
-)/
-'''
+[tool.ruff]
+extend-exclude = ["docs/*"]
+fix = true
+line-length = 88
+target-version = "py39"
 
-[tool.coverage.report]
-exclude_lines = [
-    "pragma: no cover",
-    "if TYPE_CHECKING:",
-    "if LESS_PY38:",
+[tool.ruff.lint]
+extend-select = [
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "ERA", # flake8-eradicate/eradicate
+    "I",   # isort
+    "N",   # pep8-naming
+    "PIE", # flake8-pie
+    "PGH", # pygrep
+    "RUF", # ruff checks
+    "SIM", # flake8-simplify
+    "TC",  # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "UP",  # pyupgrade
+]
+ignore = [
+    "B904",   # use 'raise ... from err'
+    "B905",   # use explicit 'strict=' parameter with 'zip()'
+    "N818",   # Exception name should be named with an Error suffix
+    "PGH003", # blanket-type-ignore
+]
+unfixable = [
+    "ERA", # do not auto remove commented out code
 ]
 
-[tool.commitizen]
-name = "cz_conventional_commits"
-version = "0.3.0"
-version_files = [
-    "pyproject.toml:version",
-    "src/_spock/__init__.py",
-    "tests/test_version.py",
-]
+[tool.ruff.lint.isort]
+force-single-line = true
+known-first-party = ["spock", "_spock"]
+lines-after-imports = 2
+lines-between-types = 1
